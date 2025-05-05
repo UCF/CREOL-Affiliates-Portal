@@ -6,14 +6,6 @@
  * The dropdown is populated with display names of users with the custom role 'affiliate'.
  */
 function affiliates_portal_login_shortcode( $atts ) {
-
-    // Redirect if already logged in.
-    if ( is_user_logged_in() && ! isset( $_GET['loggedout'] ) ) {
-        if ( ! current_user_can( 'administrator' ) ) {
-            wp_safe_redirect( home_url() );
-            exit;
-        }
-    }
     
     $error = '';
     
@@ -44,10 +36,21 @@ function affiliates_portal_login_shortcode( $atts ) {
                     wp_set_current_user( $user->ID );
                     wp_set_auth_cookie( $user->ID, true );
                     do_action( 'wp_login', $user->user_login, $user );
-                    wp_safe_redirect( home_url() );
+                    
+                    // Redirect AFTER successful login
+                    wp_safe_redirect( home_url() ); 
                     exit;
                 }
             }
+        }
+    }
+
+    // NOW, check if the user is logged in (and didn't just log out) and redirect if they shouldn't be here.
+    // This runs if the login form wasn't submitted OR if the login attempt failed.
+    if ( is_user_logged_in() && ! isset( $_GET['loggedout'] ) ) {
+        if ( ! current_user_can( 'administrator' ) ) {
+            wp_safe_redirect( home_url() );
+            exit;
         }
     }
     
@@ -55,7 +58,8 @@ function affiliates_portal_login_shortcode( $atts ) {
     $affiliates = get_users( array( 'role' => 'affiliate' ) );
     
     ob_start();
-    include plugin_dir_path( __FILE__ ) . '../templates/affiliates-login-form.php';
+    // Pass $error to the template scope
+    include plugin_dir_path( __FILE__ ) . '../templates/affiliates-login-form.php'; 
     return ob_get_clean();
 }
 add_shortcode( 'affiliates_portal_login', 'affiliates_portal_login_shortcode' );
