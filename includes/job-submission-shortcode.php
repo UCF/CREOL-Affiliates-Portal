@@ -32,37 +32,38 @@ function ap_recaptcha_async_defer($tag,$handle,$src){
 
 
 // 3) Register the public job-submission form shortcode
-add_shortcode( 'public_job_form', 'ap_public_job_form_shortcode' );
+add_shortcode('public_job_form', 'ap_public_job_form_shortcode');
+
 function ap_public_job_form_shortcode() {
   ob_start(); ?>
+  
   <style>
-    /* Inputs: narrow height, full-width */
+    /* Style input fields */
     .ap-job-form input[type="text"],
     .ap-job-form input[type="url"] {
       width: 100%;
-      max-width: 60rem;    /* up to ~960px wide */
-      height: 2rem;        /* narrow height */
+      max-width: 60rem;
+      height: 2rem;
       padding: 0.5rem;
       font-size: 1rem;
       box-sizing: border-box;
     }
 
-   <textarea
-  name="job_description"
-  required
-  style="
-    width: 100%;           /* fill the form’s container */
-    max-width: 100rem;      /* up to about 1280px wide */
-    min-height: 20rem;     /* keep it tall */
-    padding: .5rem;
-    font-size: 1rem;
-    box-sizing: border-box;
-  "
-></textarea>
-
+    /* Style the textarea */
+    .ap-job-form textarea {
+      width: 100%;
+      max-width: 100rem;
+      min-height: 20rem;
+      padding: 0.5rem;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
 
     /* Labels & button */
-    .ap-job-form label { font-size: 1rem; }
+    .ap-job-form label {
+      font-size: 1rem;
+    }
+
     .ap-job-form button {
       padding: 0.75rem 1.5rem;
       font-size: 1rem;
@@ -70,7 +71,7 @@ function ap_public_job_form_shortcode() {
   </style>
 
   <form class="ap-job-form" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST">
-    <?php wp_nonce_field('ap_submit_job','ap_submit_job_nonce'); ?>
+    <?php wp_nonce_field('ap_submit_job', 'ap_submit_job_nonce'); ?>
     <input type="hidden" name="action" value="ap_submit_job">
 
     <p>
@@ -132,12 +133,14 @@ function ap_public_job_form_shortcode() {
 
     <div class="g-recaptcha" data-sitekey="<?php echo esc_attr(AP_RECAPTCHA_SITE_KEY); ?>"></div>
 
-    <p><button type="submit">Submit Job</button></p>
+    <p>
+      <button type="submit">Submit Job</button>
+    </p>
   </form>
+
   <?php
   return ob_get_clean();
 }
-
 
 
 
