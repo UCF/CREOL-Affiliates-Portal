@@ -139,10 +139,35 @@ function ap_public_job_form_shortcode() {
     </p>
   </form>
   </div>
+  
+  <script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const textarea = document.querySelector(".ap-job-form textarea");
+    if (textarea) {
+      textarea.style.width = "100%";
+      textarea.style.maxWidth = "100rem";
+    }
+
+    const form = document.querySelector(".ap-job-form");
+    if (form) {
+      form.style.width = "100%";
+      form.style.maxWidth = "100rem";
+    }
+
+    const container = document.querySelector(".elementor-widget-container");
+    if (container) {
+      container.style.maxWidth = "100rem";
+      container.style.width = "100%";
+    }
+  });
+</script>
+
 
   <?php
   return ob_get_clean();
+  
 }
+
 
 
 
