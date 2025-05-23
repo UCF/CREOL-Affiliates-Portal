@@ -36,62 +36,56 @@ add_shortcode( 'public_job_form', 'ap_public_job_form_shortcode' );
 function ap_public_job_form_shortcode() {
   ob_start(); ?>
   <style>
-    /* Make all text/url inputs and the textarea big and responsive */
+    /* Inputs: narrow height, full-width */
     .ap-job-form input[type="text"],
-    .ap-job-form input[type="url"],
+    .ap-job-form input[type="url"] {
+      width: 100%;
+      max-width: 60rem;    /* up to ~960px wide */
+      height: 2rem;        /* narrow height */
+      padding: 0.5rem;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
+
+    /* Textarea: wide and tall */
     .ap-job-form textarea {
       width: 100%;
-      max-width: 60rem;      /* up to about 960px */
-      padding: 1.25rem;       /* 20px equivalent */
-      font-size: 1.25rem;     /* ~20px text */
-      line-height: 1.4;
-    }
-
-    /* Labels slightly larger too */
-    .ap-job-form label {
-      font-size: 1.25rem;
-    }
-
-    /* Fieldset for Job Type */
-    .ap-job-form fieldset {
       max-width: 60rem;
-      margin-bottom: 1.5rem;
-      font-size: 1.25rem;
+      min-height: 12rem;   /* tall description box */
+      padding: 0.5rem;
+      font-size: 1rem;
+      box-sizing: border-box;
     }
 
-    /* Bigger submit button */
+    /* Labels & button */
+    .ap-job-form label { font-size: 1rem; }
     .ap-job-form button {
-      padding: 1rem 2rem;
-      font-size: 1.25rem;
-    }
-
-    /* reCAPTCHA spacing */
-    .ap-job-form .g-recaptcha {
-      margin-bottom: 1.5rem;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
     }
   </style>
 
-  <form class="ap-job-form" action="<?php echo esc_url( admin_url('admin-post.php') ); ?>" method="POST">
+  <form class="ap-job-form" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST">
     <?php wp_nonce_field('ap_submit_job','ap_submit_job_nonce'); ?>
     <input type="hidden" name="action" value="ap_submit_job">
 
     <p>
       <label>
-        Company<span style="color:red; margin-left:0.25rem;">*</span><br>
+        Company<span style="color:red;">*</span><br>
         <input type="text" name="company_name" required>
       </label>
     </p>
 
     <p>
       <label>
-        Job Title<span style="color:red; margin-left:0.25rem;">*</span><br>
+        Job Title<span style="color:red;">*</span><br>
         <input type="text" name="job_title" required>
       </label>
     </p>
 
     <p>
       <label>
-        Location<span style="color:red; margin-left:0.25rem;">*</span><br>
+        Location<span style="color:red;">*</span><br>
         <input type="text" name="location" required>
       </label>
     </p>
@@ -106,8 +100,8 @@ function ap_public_job_form_shortcode() {
 
     <p>
       <label>
-        Job Description<span style="color:red; margin-left:0.25rem;">*</span><br>
-        <textarea name="job_description" rows="6" required></textarea>
+        Job Description<span style="color:red;">*</span><br>
+        <textarea name="job_description" required></textarea>
       </label>
     </p>
 
@@ -120,7 +114,7 @@ function ap_public_job_form_shortcode() {
 
     <p>
       <label>
-        Contact<span style="color:red; margin-left:0.25rem;">*</span><br>
+        Contact<span style="color:red;">*</span><br>
         <input type="text" name="contact" required>
       </label>
     </p>
@@ -132,7 +126,6 @@ function ap_public_job_form_shortcode() {
       </label>
     </p>
 
-    <!-- reCAPTCHA widget -->
     <div class="g-recaptcha" data-sitekey="<?php echo esc_attr(AP_RECAPTCHA_SITE_KEY); ?>"></div>
 
     <p><button type="submit">Submit Job</button></p>
@@ -140,6 +133,7 @@ function ap_public_job_form_shortcode() {
   <?php
   return ob_get_clean();
 }
+
 
 
 
