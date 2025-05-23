@@ -1,4 +1,10 @@
 <?php
+
+
+
+define( 'AP_RECAPTCHA_SITE_KEY',   '6LeTskYrAAAAALvjNde9MM1Nahvx-oZAWHA6dSY7' );
+define( 'AP_RECAPTCHA_SECRET_KEY', '6LeTskYrAAAAABOzBXcawC_nHotM4OePHTbKru5P' );
+
 // 1) Public shortcode for the job-submission form
 function ap_public_job_form_shortcode() {
   ob_start(); ?>
@@ -43,10 +49,11 @@ function ap_public_job_form_shortcode() {
       Check if your company is a CREOL Industrial Affiliate
     </label></p>
 
-    <p><label>
-      <input type="checkbox" name="captcha_confirm" required>
-      CAPTCHA (I am not a robot)
-    </label></p>
+    <p>
+  <div class="g-recaptcha"
+       data-sitekey="<?php echo esc_attr(AP_RECAPTCHA_SITE_KEY); ?>">
+  </div>
+</p>
 
     <p><button type="submit">Submit Job</button></p>
   </form>
@@ -59,6 +66,7 @@ add_shortcode('public_job_form','ap_public_job_form_shortcode');
 add_action('admin_post_nopriv_ap_submit_job','ap_handle_job_submission');
 add_action('admin_post_ap_submit_job','ap_handle_job_submission');
 
+
 function ap_handle_job_submission() {
   // a) Nonce check
   if ( ! isset($_POST['ap_submit_job_nonce']) ||
@@ -66,10 +74,33 @@ function ap_handle_job_submission() {
     wp_die('Security check failed');
   }
 
-  // b) CAPTCHA
-  if ( ! isset($_POST['captcha_confirm']) ) {
-    wp_die('Please confirm you are not a robot.');
-  }
+ // 0) Verify reCAPTCHA response
+$recap = sanitize_text_field( $_POST['g-recaptcha-response'] ?? '' );
+if ( empty($recap) ) {
+  wp_die('Please complete the CAPTCHA.');
+}
+
+$response = wp_remote_post(
+  'https://www.google.com/recaptcha/api/siteverify',
+  [
+    'body' => [
+      'secret'   => AP_RECAPTCHA_SECRET_KEY,
+      'response' => $recap,
+      'remoteip' => $_SERVER['REMOTE_ADDR'],
+    ],
+  ]
+);
+
+$success = false;
+if ( ! is_wp_error($response) ) {
+  $result = json_decode( wp_remote_retrieve_body($response), true );
+  $success = ! empty( $result['success'] );
+}
+
+if ( ! $success ) {
+  wp_die('CAPTCHA verification failed. Please try again.');
+}
+
 
   // c) Sanitize inputs
   $company     = sanitize_text_field( $_POST['company_name'] );
@@ -125,5 +156,17 @@ function ap_handle_job_submission() {
   // g) Redirect back with “thank you”
   wp_safe_redirect( add_query_arg('job_submitted','1', wp_get_referer() ) );
   exit;
+
+
+  add_action('wp_enqueue_scripts','ap_enqueue_recaptcha_script');
+function ap_enqueue_recaptcha_script() {
+  wp_enqueue_script(
+    'google-recaptcha',
+    'https://www.google.com/recaptcha/api.js',
+    [],
+    null,
+    true
+  );
+}
 }
 
