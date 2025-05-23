@@ -30,12 +30,6 @@ add_action( 'wp_enqueue_scripts', 'affiliates_create_job_enqueue_assets' );
  * Render the create job form shortcode.
  */
 function affiliates_create_job_widget() {
-    // Redirect if not logged in
-    if ( ! is_user_logged_in() ) {
-        wp_safe_redirect( home_url( '/portal-login' ) );
-        exit;
-    }
-
     ob_start();
     include plugin_dir_path( __FILE__ ) . '../templates/affiliates-create-job-form.php';
     return ob_get_clean();
