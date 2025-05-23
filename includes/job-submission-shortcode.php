@@ -47,15 +47,19 @@ function ap_public_job_form_shortcode() {
       box-sizing: border-box;
     }
 
-    /* Textarea: wide and tall */
-    .ap-job-form textarea {
-      width: 100%;
-      max-width: 60rem;
-      min-height: 12rem;   /* tall description box */
-      padding: 0.5rem;
-      font-size: 1rem;
-      box-sizing: border-box;
-    }
+   <textarea
+  name="job_description"
+  required
+  style="
+    width: 100%;           /* fill the form’s container */
+    max-width: 80rem;      /* up to about 1280px wide */
+    min-height: 12rem;     /* keep it tall */
+    padding: .5rem;
+    font-size: 1rem;
+    box-sizing: border-box;
+  "
+></textarea>
+
 
     /* Labels & button */
     .ap-job-form label { font-size: 1rem; }
