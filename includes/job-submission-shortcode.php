@@ -46,7 +46,7 @@ function ap_public_job_form_shortcode() {
           type="text"
           name="company_name"
           required
-          style="width:100%; max-width:600px; padding:8px;"
+          style="width:100%; max-width:800px; padding:8px;"
         >
       </label>
     </p>
@@ -58,7 +58,7 @@ function ap_public_job_form_shortcode() {
           type="text"
           name="job_title"
           required
-          style="width:100%; max-width:600px; padding:8px;"
+          style="width:100%; max-width:800px; padding:8px;"
         >
       </label>
     </p>
@@ -70,7 +70,7 @@ function ap_public_job_form_shortcode() {
           type="text"
           name="location"
           required
-          style="width:100%; max-width:600px; padding:8px;"
+          style="width:100%; max-width:800px; padding:8px;"
         >
       </label>
     </p>
@@ -90,7 +90,7 @@ function ap_public_job_form_shortcode() {
           name="job_description"
           rows="6"
           required
-          style="width:100%; max-width:600px; padding:8px;"
+          style="width:100%; max-width:1000px; padding:8px;"
         ></textarea>
       </label>
     </p>
@@ -101,7 +101,7 @@ function ap_public_job_form_shortcode() {
         <input
           type="url"
           name="apply_link"
-          style="width:100%; max-width:600px; padding:8px;"
+          style="width:100%; max-width:800px; padding:8px;"
         >
       </label>
     </p>
@@ -113,7 +113,7 @@ function ap_public_job_form_shortcode() {
           type="text"
           name="contact"
           required
-          style="width:100%; max-width:600px; padding:8px;"
+          style="width:100%; max-width:800px; padding:8px;"
         >
       </label>
     </p>
