@@ -1,1 +1,10 @@
+.ap-job-form {
+  max-width: 100rem;  /* or any wide limit you want */
+  width: 100%;
+}
+
+.ap-job-form p,
+.ap-job-form fieldset {
+  max-width: 100%;
+}
 
