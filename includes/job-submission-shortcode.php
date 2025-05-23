@@ -52,8 +52,8 @@ function ap_public_job_form_shortcode() {
   required
   style="
     width: 100%;           /* fill the form’s container */
-    max-width: 80rem;      /* up to about 1280px wide */
-    min-height: 12rem;     /* keep it tall */
+    max-width: 100rem;      /* up to about 1280px wide */
+    min-height: 20rem;     /* keep it tall */
     padding: .5rem;
     font-size: 1rem;
     box-sizing: border-box;
