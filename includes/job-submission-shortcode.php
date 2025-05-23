@@ -10,16 +10,26 @@ define( 'AP_RECAPTCHA_SITE_KEY',   '6LeTskYrAAAAALvjNde9MM1Nahvx-oZAWHA6dSY7' );
 define( 'AP_RECAPTCHA_SECRET_KEY', '6LeTskYrAAAAABOzBXcawC_nHotM4OePHTbKru5P' );
 
 // 2) Enqueue Google reCAPTCHA script on the front end
-add_action( 'wp_enqueue_scripts', 'ap_enqueue_recaptcha_script' );
-function ap_enqueue_recaptcha_script() {
-    wp_enqueue_script(
+add_action('wp_enqueue_scripts','ap_enqueue_recaptcha_script');
+function ap_enqueue_recaptcha_script(){
+    wp_register_script(
         'google-recaptcha',
-        'https://www.google.com/recaptcha/api.js',
+        'https://www.google.com/recaptcha/enterprise.js',
         [],
         null,
         true
     );
+    wp_enqueue_script('google-recaptcha');
 }
+
+add_filter('script_loader_tag','ap_recaptcha_async_defer',10,3);
+function ap_recaptcha_async_defer($tag,$handle,$src){
+    if($handle==='google-recaptcha'){
+        return '<script src="'.esc_url($src).'" async defer></script>';
+    }
+    return $tag;
+}
+
 
 // 3) Register the public job-submission form shortcode
 add_shortcode( 'public_job_form', 'ap_public_job_form_shortcode' );
@@ -66,10 +76,9 @@ function ap_public_job_form_shortcode() {
         Check if your company is a CREOL Industrial Affiliate
       </label></p>
 
-      <!-- Google reCAPTCHA widget -->
-      <div class="g-recaptcha"
-           data-sitekey="<?php echo esc_attr( AP_RECAPTCHA_SITE_KEY ); ?>">
-      </div>
+    <div class="g-recaptcha"
+       data-sitekey="<?php echo esc_attr( AP_RECAPTCHA_SITE_KEY ); ?>">
+  </div>
 
       <p><button type="submit">Submit Job</button></p>
     </form>
