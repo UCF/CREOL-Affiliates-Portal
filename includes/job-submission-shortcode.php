@@ -35,47 +35,68 @@ function ap_recaptcha_async_defer($tag,$handle,$src){
 add_shortcode( 'public_job_form', 'ap_public_job_form_shortcode' );
 function ap_public_job_form_shortcode() {
   ob_start(); ?>
+  <style>
+    /* Make all text/url inputs and the textarea big and responsive */
+    .ap-job-form input[type="text"],
+    .ap-job-form input[type="url"],
+    .ap-job-form textarea {
+      width: 100%;
+      max-width: 60rem;      /* up to about 960px */
+      padding: 1.25rem;       /* 20px equivalent */
+      font-size: 1.25rem;     /* ~20px text */
+      line-height: 1.4;
+    }
+
+    /* Labels slightly larger too */
+    .ap-job-form label {
+      font-size: 1.25rem;
+    }
+
+    /* Fieldset for Job Type */
+    .ap-job-form fieldset {
+      max-width: 60rem;
+      margin-bottom: 1.5rem;
+      font-size: 1.25rem;
+    }
+
+    /* Bigger submit button */
+    .ap-job-form button {
+      padding: 1rem 2rem;
+      font-size: 1.25rem;
+    }
+
+    /* reCAPTCHA spacing */
+    .ap-job-form .g-recaptcha {
+      margin-bottom: 1.5rem;
+    }
+  </style>
+
   <form class="ap-job-form" action="<?php echo esc_url( admin_url('admin-post.php') ); ?>" method="POST">
     <?php wp_nonce_field('ap_submit_job','ap_submit_job_nonce'); ?>
     <input type="hidden" name="action" value="ap_submit_job">
 
     <p>
       <label>
-        Company<span style="color:red; margin-left:2px;">*</span>:<br>
-        <input
-          type="text"
-          name="company_name"
-          required
-          style="width:100%; max-width:800px; padding:8px;"
-        >
+        Company<span style="color:red; margin-left:0.25rem;">*</span><br>
+        <input type="text" name="company_name" required>
       </label>
     </p>
 
     <p>
       <label>
-        Job Title<span style="color:red; margin-left:2px;">*</span>:<br>
-        <input
-          type="text"
-          name="job_title"
-          required
-          style="width:100%; max-width:800px; padding:8px;"
-        >
+        Job Title<span style="color:red; margin-left:0.25rem;">*</span><br>
+        <input type="text" name="job_title" required>
       </label>
     </p>
 
     <p>
       <label>
-        Location<span style="color:red; margin-left:2px;">*</span>:<br>
-        <input
-          type="text"
-          name="location"
-          required
-          style="width:100%; max-width:800px; padding:8px;"
-        >
+        Location<span style="color:red; margin-left:0.25rem;">*</span><br>
+        <input type="text" name="location" required>
       </label>
     </p>
 
-    <fieldset style="max-width:600px; padding:0; margin-bottom:1em;">
+    <fieldset>
       <legend>Job Type:</legend>
       <label><input type="checkbox" name="job_type[]" value="Full-time"> Full-time</label><br>
       <label><input type="checkbox" name="job_type[]" value="Part-time"> Part-time</label><br>
@@ -85,40 +106,26 @@ function ap_public_job_form_shortcode() {
 
     <p>
       <label>
-        Job Description<span style="color:red; margin-left:2px;">*</span>:<br>
-        <textarea
-          name="job_description"
-          rows="6"
-          required
-          style="width:100%; max-width:1000px; padding:8px;"
-        ></textarea>
+        Job Description<span style="color:red; margin-left:0.25rem;">*</span><br>
+        <textarea name="job_description" rows="6" required></textarea>
       </label>
     </p>
 
     <p>
       <label>
-        Link to Apply:<br>
-        <input
-          type="url"
-          name="apply_link"
-          style="width:100%; max-width:800px; padding:8px;"
-        >
+        Link to Apply<br>
+        <input type="url" name="apply_link">
       </label>
     </p>
 
     <p>
       <label>
-        Contact<span style="color:red; margin-left:2px;">*</span>:<br>
-        <input
-          type="text"
-          name="contact"
-          required
-          style="width:100%; max-width:800px; padding:8px;"
-        >
+        Contact<span style="color:red; margin-left:0.25rem;">*</span><br>
+        <input type="text" name="contact" required>
       </label>
     </p>
 
-    <p style="max-width:600px;">
+    <p>
       <label>
         <input type="checkbox" name="is_affiliate" value="1">
         Check if your company is a CREOL Industrial Affiliate
@@ -126,16 +133,14 @@ function ap_public_job_form_shortcode() {
     </p>
 
     <!-- reCAPTCHA widget -->
-    <div class="g-recaptcha"
-         data-sitekey="<?php echo esc_attr(AP_RECAPTCHA_SITE_KEY); ?>"
-         style="margin-bottom:1em;">
-    </div>
+    <div class="g-recaptcha" data-sitekey="<?php echo esc_attr(AP_RECAPTCHA_SITE_KEY); ?>"></div>
 
-    <p><button type="submit" style="padding:10px 20px;">Submit Job</button></p>
+    <p><button type="submit">Submit Job</button></p>
   </form>
   <?php
   return ob_get_clean();
 }
+
 
 
 // 4) Handle form submissions (both logged-in and anonymous)
