@@ -70,6 +70,7 @@ function ap_public_job_form_shortcode() {
     }
   </style>
 
+<div style="width:100%; max-width:100rem; margin:auto;">
   <form class="ap-job-form" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST" style="max-width:100rem; width:100%;">
     <?php wp_nonce_field('ap_submit_job', 'ap_submit_job_nonce'); ?>
     <input type="hidden" name="action" value="ap_submit_job">
@@ -137,6 +138,7 @@ function ap_public_job_form_shortcode() {
       <button type="submit">Submit Job</button>
     </p>
   </form>
+  </div>
 
   <?php
   return ob_get_clean();
