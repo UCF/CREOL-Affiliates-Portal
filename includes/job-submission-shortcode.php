@@ -218,10 +218,10 @@ function ap_handle_job_submission() {
 
     // d) Insert the job as pending
     $post_id = wp_insert_post([
-        'post_type'    => 'job',
+        'post_type'    => 'post',
         'post_title'   => $title,
         'post_content' => $description,
-        'post_status'  => 'Pending Review',
+        'post_status'  => 'pending',
     ]);
 
     if ( is_wp_error( $post_id ) ) {
