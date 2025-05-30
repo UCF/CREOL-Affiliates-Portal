@@ -241,7 +241,16 @@ function ap_handle_job_submission() {
 
     $subject = 'New Job Submission Pending Review';
     $body  = '<p>A new job has been submitted and is awaiting your approval:</p>';
-    $body .= '<p><strong>' . esc_html( $title ) . "</strong> (Job #{$post_id})</p>";
+    $body .= '<ul>';
+    $body .= '<li><strong>Company:</strong> ' . esc_html($company) . '</li>';
+    $body .= '<li><strong>Job Title:</strong> ' . esc_html($title) . '</li>';
+    $body .= '<li><strong>Location:</strong> ' . esc_html($location) . '</li>';
+    $body .= '<li><strong>Job Type:</strong> ' . esc_html(implode(', ', $job_types)) . '</li>';
+    $body .= '<li><strong>Description:</strong> ' . esc_html($description) . '</li>';
+    $body .= '<li><strong>Apply Link:</strong> <a href="' . esc_url($apply_link) . '">' . esc_html($apply_link) . '</a></li>';
+    $body .= '<li><strong>Contact:</strong> ' . esc_html($contact) . '</li>';
+    $body .= '<li><strong>Affiliate Company:</strong> ' . ($is_aff ? 'Yes' : 'No') . '</li>';
+    $body .= '</ul>';
     $body .= '<p style="text-align:center;margin:30px 0;">'
            . '<a href="' . esc_url( $edit_url ) . '"'
            .   ' style="display:inline-block;padding:12px 24px;'
@@ -251,6 +260,24 @@ function ap_handle_job_submission() {
            .   'Edit in WordPress'
            . '</a>'
            . '</p>';
+     $publish_url = admin_url('admin-post.php?action=ap_publish_job&post_id=' . $post_id . '&_wpnonce=' . wp_create_nonce('ap_publish_job_' . $post_id));
+
+    $body .= '<p style="text-align:center;margin:30px 0;">'
+          . '<a href="' . esc_url($edit_url) . '"'
+          .   ' style="display:inline-block;padding:12px 24px;'
+          .   'background-color:#0073aa;color:#ffffff;'
+          .   'text-decoration:none;border-radius:4px;'
+          .   'font-weight:bold;margin-right:10px;">'
+          .   'Edit in WordPress'
+          . '</a>'
+          . '<a href="' . esc_url($publish_url) . '"'
+          .   ' style="display:inline-block;padding:12px 24px;'
+          .   'background-color:#46b450;color:#ffffff;'
+          .   'text-decoration:none;border-radius:4px;'
+          .   'font-weight:bold;margin-left:10px;">'
+          .   'Publish to Portal'
+          . '</a>'
+          . '</p>';
     $body .= '<p>Or go to <a href="' . esc_url( $edit_url )
            . '">Jobs → Pending</a> in the WP admin.</p>';
 
@@ -259,9 +286,29 @@ function ap_handle_job_submission() {
       'From: Your Name <creolweb@ucf.edu>'
   ];
 wp_mail( $director_email, $subject, $body, $headers );
-    wp_mail( $director_email, $subject, $body, $headers );
 
     // g) Redirect back with a thank-you flag
     wp_safe_redirect( add_query_arg( 'job_submitted', '1', wp_get_referer() ) );
     exit;
 }
+add_action('admin_post_ap_publish_job', function() {
+    if (
+        !isset($_GET['post_id']) ||
+        !isset($_GET['_wpnonce']) ||
+        !current_user_can('publish_posts')
+    ) {
+        wp_die('Unauthorized', 403);
+    }
+    $post_id = intval($_GET['post_id']);
+    if (!wp_verify_nonce($_GET['_wpnonce'], 'ap_publish_job_' . $post_id)) {
+        wp_die('Invalid nonce', 403);
+    }
+    // Publish the post
+    wp_update_post([
+        'ID' => $post_id,
+        'post_status' => 'publish'
+    ]);
+    // Redirect to the post edit screen or a confirmation page
+    wp_safe_redirect(admin_url("post.php?post={$post_id}&action=edit&published=1"));
+    exit;
+});
