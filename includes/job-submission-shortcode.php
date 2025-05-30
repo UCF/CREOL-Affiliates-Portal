@@ -133,7 +133,7 @@ function ap_public_job_form_shortcode() {
             </p>
             <div class="g-recaptcha" data-sitekey="<?php echo esc_attr(AP_RECAPTCHA_SITE_KEY); ?>"></div>
             <p>
-                <button type="submit">Submit Job</button>
+                <button type="submit" class="btn btn-primary" style="margin-top:1rem;">Submit Job</button>
             </p>
         </form>
     </div>
