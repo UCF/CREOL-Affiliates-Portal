@@ -68,7 +68,7 @@ function ap_public_job_form_shortcode() {
     border-radius: 0.5rem;
     box-shadow: 0 2px 8px rgba(0,0,0,0.03);
     width: 100%;
-    max-width: 60rem;
+    max-width: 600px; /* Set a reasonable max width */
     margin: 2rem auto;
 }
 .ap-job-form {
@@ -79,24 +79,21 @@ function ap_public_job_form_shortcode() {
 .ap-job-form p,
 .ap-job-form fieldset {
     width: 100%;
-    max-width: 55rem;
-    margin: 0 auto 1rem auto;
+    margin: 0 0 1rem 0;
     text-align: left;
 }
 .ap-job-form input[type="text"],
 .ap-job-form input[type="url"],
 .ap-job-form textarea {
     width: 100%;
-    max-width: 55rem;
-    min-width: 400px;
     padding: 0.5rem;
     font-size: 1rem;
     box-sizing: border-box;
     display: block;
-    margin: 0 auto;
+    margin: 0;
 }
 .ap-job-form textarea {
-    min-height: 20rem;
+    min-height: 10rem;
 }
 .ap-job-form label {
     font-size: 1rem;
