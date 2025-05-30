@@ -35,6 +35,18 @@ function ap_recaptcha_async_defer($tag,$handle,$src){
 add_shortcode('public_job_form', 'ap_public_job_form_shortcode');
 
 function ap_public_job_form_shortcode() {
+
+  function ap_public_job_form_shortcode() {
+  ob_start();
+
+  // Show thank you message if redirected after submission
+  if ( isset($_GET['job_submitted']) && $_GET['job_submitted'] == '1' ) {
+    echo '<div class="ap-job-thankyou" style="padding:2rem;background:#e6ffe6;border:1px solid #b2ffb2;margin-bottom:2rem;">
+      <strong>Thank you!</strong> Your job has been submitted and is pending review.
+    </div>';
+    return ob_get_clean();
+  }
+
   ob_start(); ?>
   
   <style>
@@ -238,7 +250,7 @@ function ap_handle_job_submission() {
     update_post_meta( $post_id, 'is_affiliate', $is_aff );
 
     // f) Email with “Edit in WordPress” button
-    $director_email = 'affiliates@creol.ucf.edu';
+    $director_email = 'katrina.gumerov@ucf.edu';
     $edit_url       = admin_url( "post.php?post={$post_id}&action=edit" );
 
     $subject = 'New Job Submission Pending Review';
