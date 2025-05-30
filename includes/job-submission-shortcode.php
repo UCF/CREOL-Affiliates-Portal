@@ -38,14 +38,14 @@ function ap_public_job_form_shortcode() {
     ob_start();
 
     // Show thank you message if redirected after submission
-   if ( isset($_GET['job_submitted']) && $_GET['job_submitted'] == '1' ) {
+  if ( isset($_GET['job_submitted']) && $_GET['job_submitted'] == '1' ) {
     $form_url = remove_query_arg('job_submitted');
     echo '<div class="ap-job-thankyou" style="padding:2rem;background:#e6ffe6;border:1px solid #b2ffb2;margin-bottom:2rem;">
-        <strong>Thank you!</strong> Your job has been submitted and is pending review.<br><br>
-        </div>
-         <div style="margin-bottom:2rem;">
-        <a href="' . esc_url($form_url) . '" style="display:inline-block;padding:12px 24px;background-color:#0073aa;color:#fff;text-decoration:none;border-radius:4px;font-weight:bold;">
-        <button type="button" class="btn btn-secondary">Submit Another Job Posting</button>
+        <strong>Thank you!</strong> Your job has been submitted and is pending review.
+    </div>
+    <div style="margin-bottom:2rem;">
+        <a href="' . esc_url($form_url) . '">
+            <button type="button" class="btn btn-default">Submit Another Job Posting</button>
         </a>
     </div>';
     return ob_get_clean();
