@@ -35,152 +35,125 @@ function ap_recaptcha_async_defer($tag,$handle,$src){
 add_shortcode('public_job_form', 'ap_public_job_form_shortcode');
 
 function ap_public_job_form_shortcode() {
+    ob_start();
 
-  function ap_public_job_form_shortcode() {
-  ob_start();
+    // Show thank you message if redirected after submission
+    if ( isset($_GET['job_submitted']) && $_GET['job_submitted'] == '1' ) {
+        echo '<div class="ap-job-thankyou" style="padding:2rem;background:#e6ffe6;border:1px solid #b2ffb2;margin-bottom:2rem;">
+            <strong>Thank you!</strong> Your job has been submitted and is pending review.
+        </div>';
+        return ob_get_clean();
+    }
+    ?>
+    <style>
+        .ap-job-form input[type="text"],
+        .ap-job-form input[type="url"] {
+            width: 100%;
+            max-width: 60rem;
+            height: 2rem;
+            padding: 0.5rem;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        .ap-job-form textarea {
+            width: 100%;
+            max-width: 100rem;
+            min-height: 20rem;
+            padding: 0.5rem;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        .ap-job-form label {
+            font-size: 1rem;
+        }
+        .ap-job-form button {
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+        }
+    </style>
+    <div style="width:100%; max-width:100rem; margin:auto;">
+        <form class="ap-job-form" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST" style="max-width:100rem; width:100%;">
+            <?php wp_nonce_field('ap_submit_job', 'ap_submit_job_nonce'); ?>
+            <input type="hidden" name="action" value="ap_submit_job">
 
-  // Show thank you message if redirected after submission
-  if ( isset($_GET['job_submitted']) && $_GET['job_submitted'] == '1' ) {
-    echo '<div class="ap-job-thankyou" style="padding:2rem;background:#e6ffe6;border:1px solid #b2ffb2;margin-bottom:2rem;">
-      <strong>Thank you!</strong> Your job has been submitted and is pending review.
-    </div>';
+            <p>
+                <label>
+                    Company<span style="color:red;">*</span><br>
+                    <input type="text" name="company_name" required>
+                </label>
+            </p>
+            <p>
+                <label>
+                    Job Title<span style="color:red;">*</span><br>
+                    <input type="text" name="job_title" required>
+                </label>
+            </p>
+            <p>
+                <label>
+                    Location<span style="color:red;">*</span><br>
+                    <input type="text" name="location" required>
+                </label>
+            </p>
+            <fieldset>
+                <legend>Job Type:</legend>
+                <label><input type="checkbox" name="job_type[]" value="Full-time"> Full-time</label><br>
+                <label><input type="checkbox" name="job_type[]" value="Part-time"> Part-time</label><br>
+                <label><input type="checkbox" name="job_type[]" value="Fellowship"> Fellowship</label><br>
+                <label><input type="checkbox" name="job_type[]" value="Internship"> Internship</label>
+            </fieldset>
+            <p>
+                <label>
+                    Job Description<span style="color:red;">*</span><br>
+                    <textarea name="job_description" required></textarea>
+                </label>
+            </p>
+            <p>
+                <label>
+                    Link to Apply<br>
+                    <input type="url" name="apply_link">
+                </label>
+            </p>
+            <p>
+                <label>
+                    Contact<span style="color:red;">*</span><br>
+                    <input type="text" name="contact" required>
+                </label>
+            </p>
+            <p>
+                <label>
+                    <input type="checkbox" name="is_affiliate" value="1">
+                    Check if your company is a CREOL Industrial Affiliate
+                </label>
+            </p>
+            <div class="g-recaptcha" data-sitekey="<?php echo esc_attr(AP_RECAPTCHA_SITE_KEY); ?>"></div>
+            <p>
+                <button type="submit">Submit Job</button>
+            </p>
+        </form>
+    </div>
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const textarea = document.querySelector(".ap-job-form textarea");
+        if (textarea) {
+            textarea.style.width = "100%";
+            textarea.style.maxWidth = "100rem";
+        }
+        const form = document.querySelector(".ap-job-form");
+        if (form) {
+            form.style.width = "100%";
+            form.style.maxWidth = "100rem";
+        }
+        const container = document.querySelector(".elementor-widget-container");
+        if (container) {
+            container.style.maxWidth = "100rem";
+            container.style.width = "100%";
+        }
+    });
+    </script>
+    <?php
     return ob_get_clean();
-  }
-
-  ob_start(); ?>
-  
-  <style>
-    /* Style input fields */
-    .ap-job-form input[type="text"],
-    .ap-job-form input[type="url"] {
-      width: 100%;
-      max-width: 60rem;
-      height: 2rem;
-      padding: 0.5rem;
-      font-size: 1rem;
-      box-sizing: border-box;
-    }
-
-    /* Style the textarea */
-    .ap-job-form textarea {
-      width: 100%;
-      max-width: 100rem;
-      min-height: 20rem;
-      padding: 0.5rem;
-      font-size: 1rem;
-      box-sizing: border-box;
-    }
-
-    /* Labels & button */
-    .ap-job-form label {
-      font-size: 1rem;
-    }
-
-    .ap-job-form button {
-      padding: 0.75rem 1.5rem;
-      font-size: 1rem;
-    }
-  </style>
-
-<div style="width:100%; max-width:100rem; margin:auto;">
-  <form class="ap-job-form" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST" style="max-width:100rem; width:100%;">
-    <?php wp_nonce_field('ap_submit_job', 'ap_submit_job_nonce'); ?>
-    <input type="hidden" name="action" value="ap_submit_job">
-
-    <p>
-      <label>
-        Company<span style="color:red;">*</span><br>
-        <input type="text" name="company_name" required>
-      </label>
-    </p>
-
-    <p>
-      <label>
-        Job Title<span style="color:red;">*</span><br>
-        <input type="text" name="job_title" required>
-      </label>
-    </p>
-
-    <p>
-      <label>
-        Location<span style="color:red;">*</span><br>
-        <input type="text" name="location" required>
-      </label>
-    </p>
-
-    <fieldset>
-      <legend>Job Type:</legend>
-      <label><input type="checkbox" name="job_type[]" value="Full-time"> Full-time</label><br>
-      <label><input type="checkbox" name="job_type[]" value="Part-time"> Part-time</label><br>
-      <label><input type="checkbox" name="job_type[]" value="Fellowship"> Fellowship</label><br>
-      <label><input type="checkbox" name="job_type[]" value="Internship"> Internship</label>
-    </fieldset>
-
-    <p>
-      <label>
-        Job Description<span style="color:red;">*</span><br>
-        <textarea name="job_description" required></textarea>
-      </label>
-    </p>
-
-    <p>
-      <label>
-        Link to Apply<br>
-        <input type="url" name="apply_link">
-      </label>
-    </p>
-
-    <p>
-      <label>
-        Contact<span style="color:red;">*</span><br>
-        <input type="text" name="contact" required>
-      </label>
-    </p>
-
-    <p>
-      <label>
-        <input type="checkbox" name="is_affiliate" value="1">
-        Check if your company is a CREOL Industrial Affiliate
-      </label>
-    </p>
-
-    <div class="g-recaptcha" data-sitekey="<?php echo esc_attr(AP_RECAPTCHA_SITE_KEY); ?>"></div>
-
-    <p>
-      <button type="submit">Submit Job</button>
-    </p>
-  </form>
-  </div>
-  
-  <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const textarea = document.querySelector(".ap-job-form textarea");
-    if (textarea) {
-      textarea.style.width = "100%";
-      textarea.style.maxWidth = "100rem";
-    }
-
-    const form = document.querySelector(".ap-job-form");
-    if (form) {
-      form.style.width = "100%";
-      form.style.maxWidth = "100rem";
-    }
-
-    const container = document.querySelector(".elementor-widget-container");
-    if (container) {
-      container.style.maxWidth = "100rem";
-      container.style.width = "100%";
-    }
-  });
-</script>
-
-
-  <?php
-  return ob_get_clean();
-  
 }
-
-
+  
 
 
 // 4) Handle form submissions (both logged-in and anonymous)
@@ -250,7 +223,7 @@ function ap_handle_job_submission() {
     update_post_meta( $post_id, 'is_affiliate', $is_aff );
 
     // f) Email with “Edit in WordPress” button
-    $director_email = 'katrina.gumerov@ucf.edu';
+    $director_email = 'affiliates@creol.ucf.edu';
     $edit_url       = admin_url( "post.php?post={$post_id}&action=edit" );
 
     $subject = 'New Job Submission Pending Review';
