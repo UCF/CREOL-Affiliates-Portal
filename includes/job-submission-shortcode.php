@@ -206,11 +206,20 @@ function ap_handle_job_submission() {
     $is_aff      = isset( $_POST['is_affiliate'] ) ? 1 : 0;
 
     // d) Insert the job as pending
+    // Always assign "Job" category
+    $categories = [ get_cat_ID('Job') ];
+
+    // If affiliate checkbox is checked, also assign "Affiliate" category
+    if ( $is_aff ) {
+        $categories[] = get_cat_ID('Affiliate Job');
+    }
+
+    // Create the post with the sanitized data
     $post_id = wp_insert_post([
         'post_type'    => 'post',
         'post_title'   => $title,
         'post_content' => $description,
-        'post_category'=> [ get_cat_ID('Job') ], // Assign to "Job" category
+        'post_category'=> $categories,
         'post_status'  => 'pending',
     ]);
 
