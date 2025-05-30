@@ -54,21 +54,22 @@ function ap_public_job_form_shortcode() {
     <style>
         .ap-job-form input[type="text"],
         .ap-job-form input[type="url"] {
-            width: 100%;
-            max-width: 60rem;
-            height: 2rem;
-            padding: 0.5rem;
-            font-size: 1rem;
-            box-sizing: border-box;
-        }
-        .ap-job-form textarea {
-            width: 100%;
-            max-width: 100rem;
-            min-height: 20rem;
-            padding: 0.5rem;
-            font-size: 1rem;
-            box-sizing: border-box;
-        }
+        width: 100%;
+        max-width: 100%; /* or set to a specific px/rem value if you want a limit */
+        min-width: 300px; /* optional: ensures a minimum width */
+        height: 2.5rem;
+        padding: 0.5rem;
+        font-size: 1rem;
+        box-sizing: border-box;
+    }
+      .ap-job-form textarea {
+        width: 100%;
+        max-width: 100%;
+        min-height: 20rem;
+        padding: 0.5rem;
+        font-size: 1rem;
+        box-sizing: border-box;
+    }
         .ap-job-form label {
             font-size: 1rem;
         }
