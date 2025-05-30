@@ -221,6 +221,7 @@ function ap_handle_job_submission() {
         'post_type'    => 'post',
         'post_title'   => $title,
         'post_content' => $description,
+        'post_category'=> [ get_cat_ID('Job') ], // Assign to "Job" category
         'post_status'  => 'pending',
     ]);
 
