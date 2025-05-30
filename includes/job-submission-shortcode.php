@@ -51,63 +51,62 @@ function ap_public_job_form_shortcode() {
     return ob_get_clean();
 }
     ?>
-    <style>
-    .ap-job-form-container {
-        width: 100vw;
-        min-height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background: none;
-        margin: 0;
-        padding: 0;
-    }
-    .ap-job-form-wrapper {
-        background: #f3f3f3;
-        padding: 2rem;
-        border-radius: 0.5rem;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.03);
-        width: 100%;
-        max-width: 60rem;
-        margin: 2rem auto;
-    }
-    .ap-job-form {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        width: 100%;
-    }
-    .ap-job-form p,
-    .ap-job-form fieldset {
-        width: 100%;
-        max-width: 55rem;
-        margin: 0 auto 1rem auto;
-        text-align: left;
-    }
-    .ap-job-form input[type="text"],
-    .ap-job-form input[type="url"],
-    .ap-job-form textarea {
-        width: 100%;
-        max-width: 55rem;
-        min-width: 400px;
-        padding: 0.5rem;
-        font-size: 1rem;
-        box-sizing: border-box;
-        display: block;
-        margin: 0 auto;
-    }
-    .ap-job-form textarea {
-        min-height: 20rem;
-    }
-    .ap-job-form label {
-        font-size: 1rem;
-    }
-    .ap-job-form button {
-        padding: 0.75rem 1.5rem;
-        font-size: 1rem;
-        display: block;
-        margin: 1rem auto 0 auto;
-    }
+  <style>
+.ap-job-form-container {
+    width: 100vw;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: none;
+    margin: 0;
+    padding: 0;
+}
+.ap-job-form-wrapper {
+    background: #f3f3f3;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    width: 100%;
+    max-width: 60rem;
+    margin: 2rem auto;
+}
+.ap-job-form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+.ap-job-form p,
+.ap-job-form fieldset {
+    width: 100%;
+    max-width: 55rem;
+    margin: 0 auto 1rem auto;
+    text-align: left;
+}
+.ap-job-form input[type="text"],
+.ap-job-form input[type="url"],
+.ap-job-form textarea {
+    width: 100%;
+    max-width: 55rem;
+    min-width: 400px;
+    padding: 0.5rem;
+    font-size: 1rem;
+    box-sizing: border-box;
+    display: block;
+    margin: 0 auto;
+}
+.ap-job-form textarea {
+    min-height: 20rem;
+}
+.ap-job-form label {
+    font-size: 1rem;
+}
+.ap-job-form button {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    display: block;
+    margin: 1rem auto 0 auto;
+}
 </style>
 <div class="ap-job-form-container">
     <div class="ap-job-form-wrapper">
