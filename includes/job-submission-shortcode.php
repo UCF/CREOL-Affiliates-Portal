@@ -42,8 +42,10 @@ function ap_public_job_form_shortcode() {
     $form_url = remove_query_arg('job_submitted');
     echo '<div class="ap-job-thankyou" style="padding:2rem;background:#e6ffe6;border:1px solid #b2ffb2;margin-bottom:2rem;">
         <strong>Thank you!</strong> Your job has been submitted and is pending review.<br><br>
+        </div>
+         <div style="margin-bottom:2rem;">
         <a href="' . esc_url($form_url) . '" style="display:inline-block;padding:12px 24px;background-color:#0073aa;color:#fff;text-decoration:none;border-radius:4px;font-weight:bold;">
-            Submit Another Job Posting
+        <button type="button" class="btn btn-secondary">Submit Another Job Posting</button>
         </a>
     </div>';
     return ob_get_clean();
@@ -237,8 +239,9 @@ function ap_handle_job_submission() {
 
     // f) Email with “Edit in WordPress” button
     $director_email = 'ka878481@ucf.edu';
+    $subject = 'New Affiliate Job Submission Pending Review';
     $edit_url = admin_url( "post.php?post={$post_id}&action=edit" );
-$publish_url = admin_url('admin-post.php?action=ap_publish_job&post_id=' . $post_id . '&_wpnonce=' . wp_create_nonce('ap_publish_job_' . $post_id));
+    $publish_url = admin_url('admin-post.php?action=ap_publish_job&post_id=' . $post_id . '&_wpnonce=' . wp_create_nonce('ap_publish_job_' . $post_id));
 
 $body  = '<p>A new job has been submitted and is awaiting your approval:</p>';
 $body .= '<ul>';
