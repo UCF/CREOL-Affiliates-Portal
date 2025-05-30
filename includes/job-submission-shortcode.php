@@ -237,54 +237,43 @@ function ap_handle_job_submission() {
 
     // f) Email with “Edit in WordPress” button
     $director_email = 'ka878481@ucf.edu';
-    $edit_url       = admin_url( "post.php?post={$post_id}&action=edit" );
+    $edit_url = admin_url( "post.php?post={$post_id}&action=edit" );
+$publish_url = admin_url('admin-post.php?action=ap_publish_job&post_id=' . $post_id . '&_wpnonce=' . wp_create_nonce('ap_publish_job_' . $post_id));
 
-    $subject = 'New Job Submission Pending Review';
-    $body  = '<p>A new job has been submitted and is awaiting your approval:</p>';
-    $body .= '<ul>';
-    $body .= '<li><strong>Company:</strong> ' . esc_html($company) . '</li>';
-    $body .= '<li><strong>Job Title:</strong> ' . esc_html($title) . '</li>';
-    $body .= '<li><strong>Location:</strong> ' . esc_html($location) . '</li>';
-    $body .= '<li><strong>Job Type:</strong> ' . esc_html(implode(', ', $job_types)) . '</li>';
-    $body .= '<li><strong>Description:</strong> ' . esc_html($description) . '</li>';
-    $body .= '<li><strong>Apply Link:</strong> <a href="' . esc_url($apply_link) . '">' . esc_html($apply_link) . '</a></li>';
-    $body .= '<li><strong>Contact:</strong> ' . esc_html($contact) . '</li>';
-    $body .= '<li><strong>Affiliate Company:</strong> ' . ($is_aff ? 'Yes' : 'No') . '</li>';
-    $body .= '</ul>';
-    $body .= '<p style="text-align:center;margin:30px 0;">'
-           . '<a href="' . esc_url( $edit_url ) . '"'
-           .   ' style="display:inline-block;padding:12px 24px;'
-           .   'background-color:#0073aa;color:#ffffff;'
-           .   'text-decoration:none;border-radius:4px;'
-           .   'font-weight:bold;">'
-           .   'Edit in WordPress'
-           . '</a>'
-           . '</p>';
-     $publish_url = admin_url('admin-post.php?action=ap_publish_job&post_id=' . $post_id . '&_wpnonce=' . wp_create_nonce('ap_publish_job_' . $post_id));
+$body  = '<p>A new job has been submitted and is awaiting your approval:</p>';
+$body .= '<ul>';
+$body .= '<li><strong>Company:</strong> ' . esc_html($company) . '</li>';
+$body .= '<li><strong>Job Title:</strong> ' . esc_html($title) . '</li>';
+$body .= '<li><strong>Location:</strong> ' . esc_html($location) . '</li>';
+$body .= '<li><strong>Job Type:</strong> ' . esc_html(implode(', ', $job_types)) . '</li>';
+$body .= '<li><strong>Description:</strong> ' . esc_html($description) . '</li>';
+$body .= '<li><strong>Apply Link:</strong> <a href="' . esc_url($apply_link) . '">' . esc_html($apply_link) . '</a></li>';
+$body .= '<li><strong>Contact:</strong> ' . esc_html($contact) . '</li>';
+$body .= '<li><strong>Affiliate Company:</strong> ' . ($is_aff ? 'Yes' : 'No') . '</li>';
+$body .= '</ul>';
+$body .= '<p style="text-align:center;margin:30px 0;">'
+      . '<a href="' . esc_url($edit_url) . '"'
+      .   ' style="display:inline-block;padding:12px 24px;'
+      .   'background-color:#0073aa;color:#ffffff;'
+      .   'text-decoration:none;border-radius:4px;'
+      .   'font-weight:bold;margin-right:10px;">'
+      .   'Edit in WordPress'
+      . '</a>'
+      . '<a href="' . esc_url($publish_url) . '"'
+      .   ' style="display:inline-block;padding:12px 24px;'
+      .   'background-color:#46b450;color:#ffffff;'
+      .   'text-decoration:none;border-radius:4px;'
+      .   'font-weight:bold;margin-left:10px;">'
+      .   'Publish to Portal'
+      . '</a>'
+      . '</p>';
+$body .= '<p>Or go to <a href="' . esc_url( $edit_url )
+      . '">Jobs → Pending</a> in the WP admin.</p>';
 
-    $body .= '<p style="text-align:center;margin:30px 0;">'
-          . '<a href="' . esc_url($edit_url) . '"'
-          .   ' style="display:inline-block;padding:12px 24px;'
-          .   'background-color:#0073aa;color:#ffffff;'
-          .   'text-decoration:none;border-radius:4px;'
-          .   'font-weight:bold;margin-right:10px;">'
-          .   'Edit in WordPress'
-          . '</a>'
-          . '<a href="' . esc_url($publish_url) . '"'
-          .   ' style="display:inline-block;padding:12px 24px;'
-          .   'background-color:#46b450;color:#ffffff;'
-          .   'text-decoration:none;border-radius:4px;'
-          .   'font-weight:bold;margin-left:10px;">'
-          .   'Publish to Portal'
-          . '</a>'
-          . '</p>';
-    $body .= '<p>Or go to <a href="' . esc_url( $edit_url )
-           . '">Jobs → Pending</a> in the WP admin.</p>';
-
-  $headers = [
-      'Content-Type: text/html; charset=UTF-8',
-      'From: Your Name <creolweb@ucf.edu>'
-  ];
+$headers = [
+    'Content-Type: text/html; charset=UTF-8',
+    'From: Your Name <creolweb@ucf.edu>'
+];
 wp_mail( $director_email, $subject, $body, $headers );
 
     // g) Redirect back with a thank-you flag
