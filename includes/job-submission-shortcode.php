@@ -45,7 +45,7 @@ function ap_public_job_form_shortcode() {
     </div>
     <div style="margin-bottom:2rem;">
         <a href="' . esc_url($form_url) . '">
-            <button type="button" class="btn btn-default">Submit Another Job Posting</button>
+            <button type="button" class="btn btn-secondary">Submit Another Job Posting</button>
         </a>
     </div>';
     return ob_get_clean();
