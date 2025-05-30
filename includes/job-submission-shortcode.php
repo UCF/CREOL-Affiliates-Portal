@@ -51,63 +51,35 @@ function ap_public_job_form_shortcode() {
     return ob_get_clean();
 }
     ?>
-  <style>
-.ap-job-form-container {
-    width: 100vw;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: none;
-    margin: 0;
-    padding: 0;
-}
-.ap-job-form-wrapper {
-    background: #f3f3f3;
-    padding: 2rem;
-    border-radius: 0.5rem;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
-    width: 100%;
-    max-width: 600px; /* Set a reasonable max width */
-    margin: 2rem auto;
-}
-.ap-job-form {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-}
-.ap-job-form p,
-.ap-job-form fieldset {
-    width: 100%;
-    margin: 0 0 1rem 0;
-    text-align: left;
-}
-.ap-job-form input[type="text"],
-.ap-job-form input[type="url"],
-.ap-job-form textarea {
-    width: 100%;
-    padding: 0.5rem;
-    font-size: 1rem;
-    box-sizing: border-box;
-    display: block;
-    margin: 0;
-}
-.ap-job-form textarea {
-    min-height: 10rem;
-}
-.ap-job-form label {
-    font-size: 1rem;
-}
-.ap-job-form button {
-    padding: 0.75rem 1.5rem;
-    font-size: 1rem;
-    display: block;
-    margin: 1rem auto 0 auto;
-}
-</style>
-<div class="ap-job-form-container">
-    <div class="ap-job-form-wrapper">
-        <form class="ap-job-form" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST">
+    <style>
+       .ap-job-form input[type="text"],
+    .ap-job-form input[type="url"] {
+        width: 100%;
+        max-width: 100%; /* or set to a specific px/rem value if you want a limit */
+        min-width: 300px; /* optional: ensures a minimum width */
+        height: 2.5rem;
+        padding: 0.5rem;
+        font-size: 1rem;
+        box-sizing: border-box;
+    }
+    .ap-job-form textarea {
+        width: 100%;
+        max-width: 100%;
+        min-height: 20rem;
+        padding: 0.5rem;
+        font-size: 1rem;
+        box-sizing: border-box;
+    }
+        .ap-job-form label {
+            font-size: 1rem;
+        }
+        .ap-job-form button {
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+        }
+    </style>
+    <div style="width:100%; max-width:100rem; margin:auto;">
+        <form class="ap-job-form" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST" style="max-width:100rem; width:100%;">
             <?php wp_nonce_field('ap_submit_job', 'ap_submit_job_nonce'); ?>
             <input type="hidden" name="action" value="ap_submit_job">
 
@@ -166,7 +138,6 @@ function ap_public_job_form_shortcode() {
             </p>
         </form>
     </div>
-</div>
     <script>
     document.addEventListener("DOMContentLoaded", function () {
         const textarea = document.querySelector(".ap-job-form textarea");
