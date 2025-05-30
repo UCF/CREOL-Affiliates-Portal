@@ -245,7 +245,11 @@ function ap_handle_job_submission() {
     $body .= '<p>Or go to <a href="' . esc_url( $edit_url )
            . '">Jobs → Pending</a> in the WP admin.</p>';
 
-    $headers = [ 'Content-Type: text/html; charset=UTF-8' ];
+  $headers = [
+      'Content-Type: text/html; charset=UTF-8',
+      'From: Your Name <creolweb@ucf.edu>'
+  ];
+wp_mail( $director_email, $subject, $body, $headers );
     wp_mail( $director_email, $subject, $body, $headers );
 
     // g) Redirect back with a thank-you flag
