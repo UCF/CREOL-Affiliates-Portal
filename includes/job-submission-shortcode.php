@@ -221,7 +221,7 @@ function ap_handle_job_submission() {
         'post_type'    => 'job',
         'post_title'   => $title,
         'post_content' => $description,
-        'post_status'  => 'pending',
+        'post_status'  => 'Pending Review',
     ]);
 
     if ( is_wp_error( $post_id ) ) {
