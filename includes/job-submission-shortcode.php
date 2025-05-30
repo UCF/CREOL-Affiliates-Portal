@@ -51,34 +51,30 @@ function ap_public_job_form_shortcode() {
     return ob_get_clean();
 }
     ?>
-     <style>
-       .ap-job-form input[type="text"],
-    .ap-job-form input[type="url"] {
-        width: 100%;
-        max-width: 100%; /* or set to a specific px/rem value if you want a limit */
-        min-width: 300px; /* optional: ensures a minimum width */
-        height: 2.5rem;
-        padding: 0.5rem;
-        font-size: 1rem;
-        box-sizing: border-box;
-    }
-    .ap-job-form textarea {
-        width: 100%;
-        max-width: 100rem;   /* Increased max width */
-        min-width: 60rem;    /* Increased min width for horizontal length */
-        min-height: 20rem;
-        padding: 0.5rem;
-        font-size: 1rem;
-        box-sizing: border-box;
-        resize: horizontal;  /* Allow user to resize horizontally if desired */
-    }
-        .ap-job-form label {
-            font-size: 1rem;
-        }
-        .ap-job-form button {
-            padding: 0.75rem 1.5rem;
-            font-size: 1rem;
-        }
+      <style>
+      .ap-job-form input[type="text"],
+      .ap-job-form input[type="url"],
+      .ap-job-form textarea {
+          width: 100%;
+          max-width: 100rem;   /* Match textarea and input widths */
+          min-width: 60rem;    /* Match textarea and input widths */
+          height: 2.5rem;
+          padding: 0.5rem;
+          font-size: 1rem;
+          box-sizing: border-box;
+      }
+      .ap-job-form textarea {
+          min-height: 20rem;
+          resize: horizontal;
+          height: auto; /* Let height be controlled by min-height */
+      }
+      .ap-job-form label {
+          font-size: 1rem;
+      }
+      .ap-job-form button {
+          padding: 0.75rem 1.5rem;
+          font-size: 1rem;
+      }
     </style>
     <div style="width:100%; max-width:100rem; margin:auto;">
         <form class="ap-job-form" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST" style="max-width:100rem; width:100%;">
