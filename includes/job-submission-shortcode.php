@@ -51,7 +51,7 @@ function ap_public_job_form_shortcode() {
     return ob_get_clean();
 }
     ?>
-    <style>
+     <style>
        .ap-job-form input[type="text"],
     .ap-job-form input[type="url"] {
         width: 100%;
@@ -64,11 +64,13 @@ function ap_public_job_form_shortcode() {
     }
     .ap-job-form textarea {
         width: 100%;
-        max-width: 100%;
+        max-width: 100rem;   /* Increased max width */
+        min-width: 60rem;    /* Increased min width for horizontal length */
         min-height: 20rem;
         padding: 0.5rem;
         font-size: 1rem;
         box-sizing: border-box;
+        resize: horizontal;  /* Allow user to resize horizontally if desired */
     }
         .ap-job-form label {
             font-size: 1rem;
