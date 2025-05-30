@@ -223,7 +223,7 @@ function ap_handle_job_submission() {
     update_post_meta( $post_id, 'is_affiliate', $is_aff );
 
     // f) Email with “Edit in WordPress” button
-    $director_email = 'katrinagumerov24@gmail.com';
+    $director_email = 'ka878481@ucf.edu';
     $edit_url       = admin_url( "post.php?post={$post_id}&action=edit" );
 
     $subject = 'New Job Submission Pending Review';
