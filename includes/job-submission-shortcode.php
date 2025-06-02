@@ -208,7 +208,7 @@ function ap_handle_job_submission() {
 
     // d) Insert the job as pending
     // Always assign "Job" category
-    $categories = [ get_cat_ID('Job') ];
+    $categories = [ get_cat_ID('Portal Job') ];
 
     // If affiliate checkbox is checked, also assign "Affiliate" category
     if ( $is_aff ) {
