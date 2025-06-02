@@ -303,3 +303,52 @@ add_action('admin_post_ap_publish_job', function() {
     wp_safe_redirect(admin_url("post.php?post={$post_id}&action=edit&published=1"));
     exit;
 });
+
+
+
+/**
+ * 1) Schedule a daily cron event on plugin activation
+ */
+register_activation_hook( __FILE__, 'ap_schedule_delete_old_jobs' );
+function ap_schedule_delete_old_jobs() {
+    if ( ! wp_next_scheduled( 'ap_delete_old_jobs' ) ) {
+        wp_schedule_event( time(), 'daily', 'ap_delete_old_jobs' );
+    }
+}
+
+register_deactivation_hook( __FILE__, 'ap_unschedule_delete_old_jobs' );
+function ap_unschedule_delete_old_jobs() {
+    wp_clear_scheduled_hook( 'ap_delete_old_jobs' );
+}
+
+/**
+ * 2) Hook into 'ap_delete_old_jobs' to delete any posts in "Job" (and "Affiliate Job") older than 60 days.
+ */
+add_action( 'ap_delete_old_jobs', 'ap_delete_old_jobs_callback' );
+function ap_delete_old_jobs_callback() {
+    $days       = 60;
+    $job_cat_id = get_cat_ID( 'Job' );
+    $aff_cat_id = get_cat_ID( 'Affiliate Job' );
+
+    $args = array(
+        'post_type'      => 'post',
+        'posts_per_page' => -1,
+        'post_status'    => 'publish',
+        'category__in'   => array_filter( array( $job_cat_id, $aff_cat_id ) ),
+        'date_query'     => array(
+            array(
+                'column' => 'post_date',
+                'before' => "$days days ago",
+            ),
+        ),
+        'fields'         => 'ids',
+    );
+
+    $old_posts = get_posts( $args );
+    if ( ! empty( $old_posts ) ) {
+        foreach ( $old_posts as $post_id ) {
+            wp_delete_post( $post_id, true );
+        }
+    }
+}
+
