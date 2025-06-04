@@ -266,6 +266,7 @@ $body .= '<li><strong>Description:</strong> ' . esc_html($description) . '</li>'
 $body .= '<li><strong>Apply Link:</strong> <a href="' . esc_url($apply_link) . '">' . esc_html($apply_link) . '</a></li>';
 $body .= '<li><strong>Contact:</strong> ' . esc_html($contact) . '</li>';
 $body .= '<li><strong>Affiliate Company:</strong> ' . ($is_aff ? 'Yes' : 'No') . '</li>';
+$body .= '<li><strong>Posting Duration:</strong> ' . esc_html($job_duration) . ' days</li>';
 $body .= '</ul>';
 $body .= '<p style="text-align:center;margin:30px 0;">'
       . '<a href="' . esc_url($edit_url) . '"'
