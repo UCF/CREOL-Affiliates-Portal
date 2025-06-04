@@ -221,21 +221,25 @@ function ap_handle_job_submission() {
     update_post_meta( $post_id, 'job_duration', $job_duration );
 
     // d) Insert the job as pending
-    // Always assign "Job" category 
-    $categories = [ get_cat_ID('Portal Job') ];
-
-    // If affiliate checkbox is checked, also assign "Affiliate" category
+    // Assign only one category based on affiliate checkbox
     if ( $is_aff ) {
-        $categories[] = get_cat_ID('Affiliate Job');
+        $categories = [ get_cat_ID('Affiliate Job') ];
+    } else {
+        $categories = [ get_cat_ID('Portal Job') ];
     }
+
 
     // Create the post with the sanitized data
     $post_id = wp_insert_post([
-        'post_type'    => 'post',
+        'post_type'    => 'portal_job', 
         'post_title'   => $title,
         'post_content' => $description,
         'post_category'=> $categories,
         'post_status'  => 'pending',
+        'post_location'  => $location,
+        'post_job_type'  => $job_types,
+        'post_contact'  => $contact,
+        'post_apply_link'  => $apply_link
     ]);
 
     if ( is_wp_error( $post_id ) ) {
