@@ -236,11 +236,6 @@ function ap_handle_job_submission() {
         'post_content' => $description,
         'post_category'=> $categories,
         'post_status'  => 'pending',
-        'post_location'  => $location,
-        'post_job_type'  => $job_types,
-        'post_contact'  => $contact,
-        'post_apply_link'  => $apply_link,
-        'post_company'  => $company
     ]);
 
     if ( is_wp_error( $post_id ) ) {
@@ -248,12 +243,14 @@ function ap_handle_job_submission() {
     }
 
     // e) Save all meta fields
+    // Save all meta fields
     update_post_meta( $post_id, 'company_name', $company );
     update_post_meta( $post_id, 'location',     $location );
     update_post_meta( $post_id, 'job_type',     $job_types );
     update_post_meta( $post_id, 'apply_link',   $apply_link );
     update_post_meta( $post_id, 'contact',      $contact );
     update_post_meta( $post_id, 'is_affiliate', $is_aff );
+    update_post_meta( $post_id, 'job_duration', $job_duration );
 
     // f) Email with “Edit in WordPress” button
     $director_email = 'ka878481@ucf.edu';
