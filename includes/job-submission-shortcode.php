@@ -239,7 +239,8 @@ function ap_handle_job_submission() {
         'post_location'  => $location,
         'post_job_type'  => $job_types,
         'post_contact'  => $contact,
-        'post_apply_link'  => $apply_link
+        'post_apply_link'  => $apply_link,
+        'post_company'  => $company
     ]);
 
     if ( is_wp_error( $post_id ) ) {
