@@ -130,6 +130,17 @@ function ap_public_job_form_shortcode() {
                     Check if your company is a CREOL Industrial Affiliate
                 </label>
             </p>
+            <p>
+                <label>
+                    How long should this job posting stay active?<span style="color:red;">*</span><br>
+                    <select name="job_duration" required>
+                        <option value="60">60 days</option>
+                        <option value="90">90 days</option>
+                        <option value="120">120 days</option>
+                    </select>
+                </label>
+            </p>
+
             <div class="g-recaptcha" data-sitekey="<?php echo esc_attr(AP_RECAPTCHA_SITE_KEY); ?>"></div>
             <p>
                 <button type="submit" class="btn btn-primary" style="margin-top:1rem;">Submit Job</button>
@@ -205,9 +216,12 @@ function ap_handle_job_submission() {
                    : [];
     $contact     = sanitize_text_field( $_POST['contact'] );
     $is_aff      = isset( $_POST['is_affiliate'] ) ? 1 : 0;
+    $job_duration = isset($_POST['job_duration']) ? intval($_POST['job_duration']) : 60;
+    // ...after other update_post_meta calls:
+    update_post_meta( $post_id, 'job_duration', $job_duration );
 
     // d) Insert the job as pending
-    // Always assign "Job" category
+    // Always assign "Job" category 
     $categories = [ get_cat_ID('Portal Job') ];
 
     // If affiliate checkbox is checked, also assign "Affiliate" category
@@ -326,7 +340,6 @@ function ap_unschedule_delete_old_jobs() {
  */
 add_action( 'ap_delete_old_jobs', 'ap_delete_old_jobs_callback' );
 function ap_delete_old_jobs_callback() {
-    $days       = 60;
     $job_cat_id = get_cat_ID( 'Job' );
     $aff_cat_id = get_cat_ID( 'Affiliate Job' );
 
@@ -335,19 +348,21 @@ function ap_delete_old_jobs_callback() {
         'posts_per_page' => -1,
         'post_status'    => 'publish',
         'category__in'   => array_filter( array( $job_cat_id, $aff_cat_id ) ),
-        'date_query'     => array(
-            array(
-                'column' => 'post_date',
-                'before' => "$days days ago",
-            ),
-        ),
         'fields'         => 'ids',
     );
 
-    $old_posts = get_posts( $args );
-    if ( ! empty( $old_posts ) ) {
-        foreach ( $old_posts as $post_id ) {
-            wp_delete_post( $post_id, true );
+    $posts = get_posts( $args );
+    if ( ! empty( $posts ) ) {
+        foreach ( $posts as $post_id ) {
+            $duration = intval( get_post_meta( $post_id, 'job_duration', true ) );
+            if ( ! $duration ) {
+                $duration = 60; // Default if not set
+            }
+            $post_date = get_post_field( 'post_date', $post_id );
+            $expire_time = strtotime( $post_date . " +{$duration} days" );
+            if ( time() > $expire_time ) {
+                wp_delete_post( $post_id, true );
+            }
         }
     }
 }
