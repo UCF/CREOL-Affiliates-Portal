@@ -254,7 +254,7 @@ function ap_handle_job_submission() {
 
     // f) Email with “Edit in WordPress” button
     $director_email = 'ka878481@ucf.edu';
-    $subject = 'New Affiliate Job Submission Pending Review';
+    $subject = 'New Job Portal Submission Pending Review';
     $edit_url = admin_url( "post.php?post={$post_id}&action=edit" );
     $publish_url = admin_url('admin-post.php?action=ap_publish_job&post_id=' . $post_id . '&_wpnonce=' . wp_create_nonce('ap_publish_job_' . $post_id));
 
@@ -286,8 +286,8 @@ $body .= '<p style="text-align:center;margin:30px 0;">'
       .   'Publish to Portal'
       . '</a>'
       . '</p>';
-$body .= '<p>Or go to <a href="' . esc_url( $edit_url )
-      . '">Jobs → Pending</a> in the WP admin.</p>';
+$body .= '<p>Or go to <a href="' . esc_url( admin_url('edit.php?post_type=portal_job&post_status=pending') )
+      . '">Portal Jobs → Pending</a> in the WP admin.</p>';
 
 $headers = [
     'Content-Type: text/html; charset=UTF-8',
@@ -369,4 +369,12 @@ function ap_delete_old_jobs_callback() {
         }
     }
 }
+function apply_link_shortcode() {
+    $url = get_post_meta( get_the_ID(), 'apply_link', true );
+    if ( ! empty( $url ) ) {
+        return '<a class="apply-link-button" href="' . esc_url( $url ) . '" target="_blank" rel="noopener noreferrer">Link to Apply</a>';
+    }
+    return '';
+}
+add_shortcode( 'apply_link', 'apply_link_shortcode' );
 
