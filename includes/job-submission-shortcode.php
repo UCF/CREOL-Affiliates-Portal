@@ -372,9 +372,12 @@ function ap_delete_old_jobs_callback() {
 function apply_link_shortcode() {
     $url = get_post_meta( get_the_ID(), 'apply_link', true );
     if ( ! empty( $url ) ) {
-        return '<a class="apply-link-button" href="' . esc_url( $url ) . '" target="_blank" rel="noopener noreferrer">Link to Apply</a>';
+        return '<a href="' . esc_url( $url ) . '" target="_blank" rel="noopener noreferrer">
+                    <button type="button" class="btn btn-primary">Link to Apply</button>
+                </a>';
     }
     return '';
 }
 add_shortcode( 'apply_link', 'apply_link_shortcode' );
+
 
