@@ -53,7 +53,7 @@ function ap_public_job_form_shortcode() {
     ?>
       <style>
     .ap-job-form {
-    width: 500px;
+    width: 700px;
     max-width: 100%;
     margin-left: 0;
     margin-right: auto;
