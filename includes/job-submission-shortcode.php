@@ -268,7 +268,7 @@ function ap_handle_job_submission() {
     }, 10, 3);
 
     // f) Email with “Edit in WordPress” button
-    $director_email = 'ka878481@ucf.edu';
+    $director_email = 'affiliates@creol.ucf.edu';
     $subject = 'New Job Portal Submission Pending Review';
     $edit_url = admin_url( "post.php?post={$post_id}&action=edit" );
     $publish_url = admin_url('admin-post.php?action=ap_publish_job&post_id=' . $post_id . '&_wpnonce=' . wp_create_nonce('ap_publish_job_' . $post_id));
@@ -306,7 +306,7 @@ $body .= '<p>Or go to <a href="' . esc_url( admin_url('edit.php?post_type=portal
 
 $headers = [
     'Content-Type: text/html; charset=UTF-8',
-    'From: Your Name <creolweb@ucf.edu>'
+    'From: CREOL Job Board <creolweb@ucf.edu>'
 ];
 wp_mail( $director_email, $subject, $body, $headers );
 
