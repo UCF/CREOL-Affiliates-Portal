@@ -95,7 +95,7 @@ function ap_public_job_form_shortcode() {
             </p>
             <p>
                 <label>
-                    Location<span style="color:red;">*</span><br>
+                    Location (Please specify if remote)<span style="color:red;">*</span><br>
                     <input type="text" name="location" required>
                 </label>
             </p>
