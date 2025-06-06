@@ -259,6 +259,14 @@ function ap_handle_job_submission() {
     update_post_meta( $post_id, 'is_affiliate', $is_aff );
     update_post_meta( $post_id, 'job_duration', $job_duration );
 
+    add_action('save_post_portal_job', function($post_id, $post, $update) {
+        // Only set on first creation, not on update
+        if ($update) return;
+
+        // Set the AE Post Template to your template's post ID
+        update_post_meta($post_id, 'ae_template', 30479); 
+    }, 10, 3);
+
     // f) Email with “Edit in WordPress” button
     $director_email = 'ka878481@ucf.edu';
     $subject = 'New Job Portal Submission Pending Review';
