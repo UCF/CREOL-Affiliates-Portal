@@ -114,13 +114,13 @@ function ap_public_job_form_shortcode() {
             </p>
             <p>
                 <label>
-                    Link to Apply<br>
+                    Link to Apply<span style="color:red;">*</span><br>
                     <input type="url" name="apply_link" required>
                 </label>
             </p>
             <p>
                 <label>
-                    Contact<span style="color:red;">*</span><br>
+                    Contact<br>
                     <input type="text" name="contact">
                 </label>
             </p>
@@ -149,7 +149,7 @@ function ap_public_job_form_shortcode() {
         </form>
         <div style="margin-top:2rem; text-align:right;">
             <p style="font-size:1.1rem; margin-bottom:0.5rem;"><strong>Need help?</strong></p>
-            <a href="mailto:affiliates@creol.ucf.edu" class="btn btn-secondary" style="padding:0.75rem 1.5rem; font-size:1rem; background:#0073aa; color:#fff; border:none; border-radius:4px; text-decoration:none;">
+            <a href="mailto:affiliates@creol.ucf.edu" class="btn btn-secondary">
                 Contact Us
             </a>
         </div>
