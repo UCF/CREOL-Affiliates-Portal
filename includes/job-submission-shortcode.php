@@ -52,12 +52,16 @@ function ap_public_job_form_shortcode() {
 }
     ?>
       <style>
+    .ap-job-form {
+    width: 500px;
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: auto;
+    }
     .ap-job-form input[type="text"],
     .ap-job-form input[type="url"],
     .ap-job-form textarea {
         width: 100%;
-        max-width: 100%;
-        min-width: 0;
         box-sizing: border-box;
         height: 2.5rem;
         padding: 0.5rem;
@@ -69,16 +73,14 @@ function ap_public_job_form_shortcode() {
         height: auto;
     }
     @media (max-width: 600px) {
-        .ap-job-form,
-        .ap-job-form * {
-            max-width: 100% !important;
+        .ap-job-form {
             width: 100% !important;
-            min-width: 0 !important;
+            max-width: 100% !important;
         }
     }
     </style>
-    <div style="width:100%; max-width:600px; margin:auto;">
-        <form class="ap-job-form" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST" style="max-width:100rem; width:100%;">
+    <div >
+        <form class="ap-job-form" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST">
             <?php wp_nonce_field('ap_submit_job', 'ap_submit_job_nonce'); ?>
             <input type="hidden" name="action" value="ap_submit_job">
 
