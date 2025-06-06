@@ -115,13 +115,13 @@ function ap_public_job_form_shortcode() {
             <p>
                 <label>
                     Link to Apply<br>
-                    <input type="url" name="apply_link">
+                    <input type="url" name="apply_link" required>
                 </label>
             </p>
             <p>
                 <label>
                     Contact<span style="color:red;">*</span><br>
-                    <input type="text" name="contact" required>
+                    <input type="text" name="contact">
                 </label>
             </p>
             <p>
@@ -145,7 +145,14 @@ function ap_public_job_form_shortcode() {
             <p>
                 <button type="submit" class="btn btn-primary" style="margin-top:1rem;">Submit Job</button>
             </p>
+        
         </form>
+        <div style="margin-top:2rem; text-align:right;">
+            <p style="font-size:1.1rem; margin-bottom:0.5rem;"><strong>Need help?</strong></p>
+            <a href="mailto:affiliates@creol.ucf.edu" class="btn btn-secondary" style="padding:0.75rem 1.5rem; font-size:1rem; background:#0073aa; color:#fff; border:none; border-radius:4px; text-decoration:none;">
+                Contact Us
+            </a>
+        </div>
     </div>
     <script>
     document.addEventListener("DOMContentLoaded", function () {
