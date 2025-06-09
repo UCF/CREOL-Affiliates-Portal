@@ -205,7 +205,7 @@ function ap_handle_job_submission() {
     if ( empty( $recap ) ) {
         wp_die( 'Please complete the CAPTCHA.' );
     }
-
+// comment
     $response = wp_remote_post( 'https://www.google.com/recaptcha/api/siteverify', [
         'body' => [
             'secret'   => AP_RECAPTCHA_SECRET_KEY,
