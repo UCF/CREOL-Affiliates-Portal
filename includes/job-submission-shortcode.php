@@ -373,7 +373,7 @@ function ap_delete_old_jobs_callback() {
     $aff_cat_id = get_cat_ID( 'Affiliate Job' );
 
     $args = array(
-        'post_type'      => 'post',
+        'post_type'      => 'portal_job',
         'posts_per_page' => -1,
         'post_status'    => 'publish',
         'category__in'   => array_filter( array( $job_cat_id, $aff_cat_id ) ),
