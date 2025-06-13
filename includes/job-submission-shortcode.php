@@ -308,7 +308,7 @@ $body .= '<li><strong>Company:</strong> ' . esc_html($company) . '</li>';
 $body .= '<li><strong>Job Title:</strong> ' . esc_html($title) . '</li>';
 $body .= '<li><strong>Location:</strong> ' . esc_html($location) . '</li>';
 $body .= '<li><strong>Job Type:</strong> ' . esc_html(implode(', ', $job_types)) . '</li>';
-$body .= '<li><strong>Description:</strong> ' . esc_html($description) . '</li>';
+$body .= '<li><strong>Description:</strong> ' . wp_kses_post($description) . '</li>';
 $body .= '<li><strong>Apply Link:</strong> <a href="' . esc_url($apply_link) . '">' . esc_html($apply_link) . '</a></li>';
 $body .= '<li><strong>Contact:</strong> ' . esc_html($contact) . '</li>';
 $body .= '<li><strong>Affiliate Company:</strong> ' . ($is_aff ? 'Yes' : 'No') . '</li>';
