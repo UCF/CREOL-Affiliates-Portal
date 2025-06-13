@@ -120,7 +120,21 @@ function ap_public_job_form_shortcode() {
             <p>
                 <label>
                     Job Description<span style="color:red;">*</span><br>
-                    <textarea name="job_description" required></textarea>
+                    <?php
+                wp_editor(
+                    '', // Default content
+                    'job_description', // Unique ID
+                    [
+                        'textarea_name' => 'job_description',
+                        'media_buttons' => false,
+                        'teeny'         => true,
+                        'quicktags'     => true,
+                        'textarea_rows' => 10,
+                        'editor_height' => 200,
+                    ]
+                );
+            ?>
+                    <span style="font-size:0.9rem;color:#666;">Use the editor to format your job description.</span>
                 </label>
             </p>
             <p>
@@ -165,22 +179,26 @@ function ap_public_job_form_shortcode() {
             </a>
         </div>
     </div>
-    <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const textarea = document.querySelector(".ap-job-form textarea");
-        if (textarea) {
-            textarea.style.width = "100%";
-            textarea.style.maxWidth = "100rem";
-        }
-        const form = document.querySelector(".ap-job-form");
+   <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('.ap-job-form');
         if (form) {
-            form.style.width = "100%";
-            form.style.maxWidth = "100rem";
-        }
-        const container = document.querySelector(".elementor-widget-container");
-        if (container) {
-            container.style.maxWidth = "100rem";
-            container.style.width = "100%";
+            form.addEventListener('submit', function(e) {
+                let desc = '';
+                if (typeof tinymce !== 'undefined') {
+                    const editor = tinymce.get('job_description');
+                    if (editor) {
+                        desc = editor.getContent({format: 'text'}).trim();
+                    }
+                } else {
+                    const textarea = document.getElementById('job_description');
+                    if (textarea) desc = textarea.value.trim();
+                }
+                if (!desc) {
+                    alert('Please enter a job description.');
+                    e.preventDefault();
+                }
+            });
         }
     });
     </script>

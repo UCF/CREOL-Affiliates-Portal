@@ -24,6 +24,11 @@ require_once plugin_dir_path( __FILE__ ) . 'api/affiliates-rest-controller.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/affiliates-list-jobs-shortcode.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/affiliates-create-job-shortcode.php';
 
+add_action('wp_enqueue_scripts', function() {
+    if ( is_page() || is_single() ) { // or refine to only your form page
+        wp_enqueue_editor();
+    }
+});
 // Shortcode for the new public job-submission form
 require_once plugin_dir_path( __FILE__ ) . 'includes/job-submission-shortcode.php';
 
