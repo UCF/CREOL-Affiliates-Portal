@@ -27,6 +27,9 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/affiliates-create-job-short
 // Shortcode for the new public job-submission form
 require_once plugin_dir_path( __FILE__ ) . 'includes/job-submission-shortcode.php';
 
+register_activation_hook( __FILE__, 'ap_schedule_delete_old_jobs' );
+register_deactivation_hook( __FILE__, 'ap_unschedule_delete_old_jobs' );
+
 // Hook your REST controller
 add_action( 'rest_api_init', function() {
     $controller = new Affiliates_REST_Controller();

@@ -369,7 +369,7 @@ function ap_unschedule_delete_old_jobs() {
  */
 add_action( 'ap_delete_old_jobs', 'ap_delete_old_jobs_callback' );
 function ap_delete_old_jobs_callback() {
-    $job_cat_id = get_cat_ID( 'Job' );
+    $job_cat_id = get_cat_ID( 'Portal Job' );
     $aff_cat_id = get_cat_ID( 'Affiliate Job' );
 
     $args = array(
