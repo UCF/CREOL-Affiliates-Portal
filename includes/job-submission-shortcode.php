@@ -14,7 +14,7 @@ add_action('wp_enqueue_scripts','ap_enqueue_recaptcha_script');
 function ap_enqueue_recaptcha_script(){
     wp_register_script(
         'google-recaptcha',
-        'https://www.google.com/recaptcha/enterprise.js',
+        'https://www.google.com/recaptcha/api.js',
         [],
         null,
         true
