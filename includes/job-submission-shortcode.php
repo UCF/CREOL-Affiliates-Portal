@@ -335,7 +335,7 @@ $body .= '<p>Or go to <a href="' . esc_url( admin_url('edit.php?post_type=portal
 
 $headers = [
     'Content-Type: text/html; charset=UTF-8',
-    'From: CREOL Job Board <noreply@creol.ucf.edu>'
+    'From: CREOL Job Board <creolweb@ucf.edu>'
 ];
 wp_mail( $director_email, $subject, $body, $headers );
 
