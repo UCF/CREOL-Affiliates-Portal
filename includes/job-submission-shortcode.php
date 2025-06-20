@@ -296,16 +296,14 @@ function ap_handle_job_submission() {
         update_post_meta($post_id, 'ae_template', 30479); 
     }, 10, 3);
 
-    // f) Email with “Edit in WordPress” button
+    // f) Email with "Edit in WordPress" button
     $director_email = 'affiliates@creol.ucf.edu';
     $subject = 'New Job Portal Submission Pending Review';
-    $edit_url = admin_url( "post.php?post={$post_id}&action=edit" );
-    $publish_nonce = wp_create_nonce('ap_publish_job_' . $post_id);
-    $publish_url = admin_url(add_query_arg([
-        'action' => 'ap_publish_job',
-        'post_id' => $post_id,
-        '_wpnonce' => $publish_nonce
-    ], 'admin-post.php'));
+    $edit_url = admin_url("post.php?post={$post_id}&action=edit");
+    
+    // Generate secure publish token
+    $publish_token = generate_publish_token($post_id);
+    $publish_url = admin_url("admin-post.php?action=ap_publish_job&post_id={$post_id}&token={$publish_token}");
 
 $body  = '<p>A new job has been submitted and is awaiting your approval:</p>';
 $body .= '<ul>';
@@ -351,26 +349,50 @@ wp_mail( $director_email, $subject, $body, $headers );
 add_action('admin_post_ap_publish_job', function() {
     if (
         !isset($_GET['post_id']) ||
-        !isset($_GET['_wpnonce']) ||
+        !isset($_GET['token']) ||
         !current_user_can('publish_posts')
     ) {
         wp_die('Unauthorized', 403);
     }
+    
     $post_id = intval($_GET['post_id']);
-    if (!wp_verify_nonce($_GET['_wpnonce'], 'ap_publish_job_' . $post_id)) {
-        wp_die('Invalid nonce', 403);
+    $token = sanitize_text_field($_GET['token']);
+    
+    // Verify token
+    $stored_token_data = get_post_meta($post_id, '_publish_token', true);
+    if (
+        empty($stored_token_data) ||
+        $stored_token_data['token'] !== $token ||
+        time() > $stored_token_data['expires']
+    ) {
+        wp_die('Invalid or expired publish link. Please use the Portal Jobs → Pending link to manage jobs.', 403);
     }
+    
+    // Token is valid, delete it so it can't be used again
+    delete_post_meta($post_id, '_publish_token');
+    
     // Publish the post
     wp_update_post([
         'ID' => $post_id,
         'post_status' => 'publish'
     ]);
-    // Redirect to the post edit screen or a confirmation page
+    
+    // Redirect to the post edit screen with a confirmation
     wp_safe_redirect(admin_url("post.php?post={$post_id}&action=edit&published=1"));
     exit;
 });
 
 
+// Add this near the top of the file, after the defined check
+function generate_publish_token($post_id) {
+    $token = wp_generate_password(32, false);
+    $expiry = time() + (24 * 60 * 60); // 24 hours from now
+    update_post_meta($post_id, '_publish_token', [
+        'token' => $token,
+        'expires' => $expiry
+    ]);
+    return $token;
+}
 
 /**
  * 1) Schedule a daily cron event on plugin activation
