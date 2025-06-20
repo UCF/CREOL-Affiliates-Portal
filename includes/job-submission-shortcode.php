@@ -300,7 +300,12 @@ function ap_handle_job_submission() {
     $director_email = 'affiliates@creol.ucf.edu';
     $subject = 'New Job Portal Submission Pending Review';
     $edit_url = admin_url( "post.php?post={$post_id}&action=edit" );
-    $publish_url = admin_url('admin-post.php?action=ap_publish_job&post_id=' . $post_id . '&_wpnonce=' . wp_create_nonce('ap_publish_job_' . $post_id));
+    $publish_nonce = wp_create_nonce('ap_publish_job_' . $post_id);
+    $publish_url = admin_url(add_query_arg([
+        'action' => 'ap_publish_job',
+        'post_id' => $post_id,
+        '_wpnonce' => $publish_nonce
+    ], 'admin-post.php'));
 
 $body  = '<p>A new job has been submitted and is awaiting your approval:</p>';
 $body .= '<ul>';
