@@ -5,30 +5,7 @@
 
   defined( 'ABSPATH' ) || exit;
 
-  // 1) Your reCAPTCHA keys
-  define( 'AP_RECAPTCHA_SITE_KEY',   '6LeTskYrAAAAALvjNde9MM1Nahvx-oZAWHA6dSY7' );
-  define( 'AP_RECAPTCHA_SECRET_KEY', '6LeTskYrAAAAABOzBXcawC_nHotM4OePHTbKru5P' );
-
-  // 2) Enqueue Google reCAPTCHA script on the front end the right kind
-  add_action('wp_enqueue_scripts','ap_enqueue_recaptcha_script');
-  function ap_enqueue_recaptcha_script(){
-      wp_register_script(
-              'google-recaptcha',
-                      'https://www.google.com/recaptcha/api.js',
-                              [],
-                                      null,
-                                              true
-                                                  );
-                                                      wp_enqueue_script('google-recaptcha');
-                                                      }
-
-add_filter('script_loader_tag','ap_recaptcha_async_defer',10,3);
-function ap_recaptcha_async_defer($tag,$handle,$src){
-    if($handle==='google-recaptcha'){
-        return '<script src="'.esc_url($src).'" async defer></script>';
-    }
-    return $tag;
-}
+// Job submission form functionality
 
 
 // 3) Register the public job-submission form shortcode
@@ -165,8 +142,6 @@ function ap_public_job_form_shortcode() {
                     </select>
                 </label>
             </p>
-
-            <div class="g-recaptcha" data-sitekey="<?php echo esc_attr(AP_RECAPTCHA_SITE_KEY); ?>"></div>
             <p>
                 <button type="submit" class="btn btn-primary" style="margin-top:1rem;">Submit Job</button>
             </p>
@@ -218,30 +193,7 @@ function ap_handle_job_submission() {
         wp_die( 'Security check failed.' );
     }
 
-    // b) Verify Google reCAPTCHA
-    $recap = sanitize_text_field( $_POST['g-recaptcha-response'] ?? '' );
-    if ( empty( $recap ) ) {
-        wp_die( 'Please complete the CAPTCHA.' );
-    }
-// comment
-    $response = wp_remote_post( 'https://www.google.com/recaptcha/api/siteverify', [
-        'body' => [
-            'secret'   => AP_RECAPTCHA_SECRET_KEY,
-            'response' => $recap,
-            'remoteip' => $_SERVER['REMOTE_ADDR'],
-        ],
-    ] );
-
-    if ( is_wp_error( $response ) ) {
-        wp_die( 'CAPTCHA verification error. Please try again.' );
-    }
-
-    $result = json_decode( wp_remote_retrieve_body( $response ), true );
-    if ( empty( $result['success'] ) ) {
-        wp_die( 'CAPTCHA verification failed. Please try again.' );
-    }
-
-    // c) Sanitize other inputs
+    // Sanitize inputs
     $company     = sanitize_text_field( $_POST['company_name'] );
     $title       = sanitize_text_field( $_POST['job_title'] );
     $location    = sanitize_text_field( $_POST['location'] );
