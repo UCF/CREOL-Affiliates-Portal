@@ -13,9 +13,9 @@ add_shortcode('public_job_form', 'ap_public_job_form_shortcode');
 
 function ap_public_job_form_shortcode() {
     ob_start();
-
+    wp_enqueue_script('google-recaptcha', 'https://www.google.com/recaptcha/api.js', array(), null, true);
     // Show thank you message if redirected after submission
-  if ( isset($_GET['job_submitted']) && $_GET['job_submitted'] == '1' ) {
+    if ( isset($_GET['job_submitted']) && $_GET['job_submitted'] == '1' ) {
     $form_url = remove_query_arg('job_submitted');
     echo '<div class="ap-job-thankyou" style="padding:2rem;background:#e6ffe6;border:1px solid #b2ffb2;margin-bottom:2rem;">
         <strong>Thank you!</strong> Your job has been submitted and is pending review.
@@ -100,14 +100,20 @@ function ap_public_job_form_shortcode() {
                     <?php
                 wp_editor(
                     '', // Default content
-                    'job_description', // Unique ID
+                     'job_description', // Unique ID
                     [
                         'textarea_name' => 'job_description',
                         'media_buttons' => false,
-                        'teeny'         => true,
-                        'quicktags'     => true,
+                        'teeny'        => true,
+                        'quicktags'    => true,
                         'textarea_rows' => 10,
+                        'editor_class' => 'required',
                         'editor_height' => 200,
+                        'tinymce'      => [
+                            'toolbar1' => 'bold,italic,bullist,numlist,link',
+                            'toolbar2' => '',
+                            'plugins'  => 'lists,paste,link'
+                        ]
                     ]
                 );
             ?>
@@ -156,41 +162,51 @@ function ap_public_job_form_shortcode() {
     </div>
  
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const form = document.querySelector('.ap-job-form');
-        if (form) {
-            form.addEventListener('submit', async function(e) {
-                e.preventDefault();
-                
-                // Get description content
-                let desc = '';
-                if (typeof tinymce !== 'undefined') {
-                    const editor = tinymce.get('job_description');
-                    if (editor) {
-                        desc = editor.getContent({format: 'text'}).trim();
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('.ap-job-form');
+            if (form) {
+                form.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    
+                    // Get description content
+                    let desc = '';
+                    if (window.tinyMCE) {
+                        const editor = tinyMCE.get('job_description');
+                        if (editor) {
+                            desc = editor.getContent();
+                        }
                     }
-                } else {
-                    const textarea = document.getElementById('job_description');
-                    if (textarea) desc = textarea.value.trim();
-                }
-                
-                if (!desc) {
-                    alert('Please enter a job description.');
-                    return;
-                }
-                 try {
-                    // Execute reCAPTCHA with site key from WordPress config
-                    const token = await grecaptcha.execute('<?php echo esc_js(RECAPTCHA_SITE_KEY); ?>', {action: 'submit_job'});
-                    document.getElementById('recaptchaResponse').value = token;
-                    form.submit();
-                } catch (error) {
-                    console.error('reCAPTCHA error:', error);
-                    alert('Error validating form submission. Please try again.');
-                }
-            });
-        }
-    });
-    </script>
+                    if (!desc) {
+                        const textarea = document.getElementById('job_description');
+                        if (textarea) desc = textarea.value.trim();
+                    }
+                    
+                    if (!desc) {
+                        alert('Please enter a job description.');
+                        return;
+                    }
+
+                    try {
+                        console.log('Executing reCAPTCHA...');
+                        // Execute reCAPTCHA with site key from WordPress config
+                        const token = await grecaptcha.execute('<?php echo esc_js(RECAPTCHA_SITE_KEY); ?>', {action: 'submit_job'});
+                        console.log('Got token:', token ? 'yes' : 'no');
+                        
+                        if (!token) {
+                            throw new Error('No reCAPTCHA token received');
+                        }
+
+                        document.getElementById('recaptchaResponse').value = token;
+                        console.log('Submitting form...');
+                        form.submit();
+                    } catch (error) {
+                        console.error('reCAPTCHA error:', error);
+                        alert('Error validating form submission. Please try again.');
+                    }
+                });
+            }
+        });
+        </script>
     <?php
     return ob_get_clean();
 }
