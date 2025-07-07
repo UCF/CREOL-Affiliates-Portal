@@ -178,10 +178,9 @@ function ap_public_job_form_shortcode() {
                     alert('Please enter a job description.');
                     return;
                 }
-
-                try {
-                    // Execute existing reCAPTCHA
-                    const token = await grecaptcha.execute('6LcZElMpAAAAAHVXhiMKAnjZeBYYfqOWpGqpQF12', {action: 'submit_job'});
+                 try {
+                    // Execute reCAPTCHA with site key from WordPress config
+                    const token = await grecaptcha.execute('<?php echo esc_js(RECAPTCHA_SITE_KEY); ?>', {action: 'submit_job'});
                     document.getElementById('recaptchaResponse').value = token;
                     form.submit();
                 } catch (error) {
