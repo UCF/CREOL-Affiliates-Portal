@@ -94,13 +94,14 @@ function ap_public_job_form_shortcode() {
                 <label><input type="checkbox" name="job_type[]" value="Fellowship"> Fellowship</label><br>
                 <label><input type="checkbox" name="job_type[]" value="Internship"> Internship</label>
             </fieldset>
-            <p>
-                <label>
-                    Job Description<span style="color:red;">*</span><br>
-                    <?php
+            <p class="job-description-field">
+                <label style="margin-bottom:0;">
+                    Job Description<span style="color:red;">*</span>
+                </label>
+                <?php
                 wp_editor(
                     '', // Default content
-                     'job_description', // Unique ID
+                    'job_description', // Unique ID
                     [
                         'textarea_name' => 'job_description',
                         'media_buttons' => false,
@@ -116,9 +117,8 @@ function ap_public_job_form_shortcode() {
                         ]
                     ]
                 );
-            ?>
-                    <span style="font-size:0.9rem;color:#666;">Use the editor to format your job description.</span>
-                </label>
+                ?>
+                <span class="description-help" style="font-size:0.9rem;color:#666;">Use the editor to format your job description.</span>
             </p>
             <p>
                 <label>
