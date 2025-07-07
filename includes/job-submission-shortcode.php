@@ -213,7 +213,7 @@ function ap_handle_job_submission() {
         wp_die('reCAPTCHA verification failed.');
     }
 
-   $recaptcha_secret = '6LcZElMpAAAAAE8AybhfvOjuUsQ8Elw7iQRPckTv'; // Add your reCAPTCHA secret key here
+   $recaptcha_secret = defined('RECAPTCHA_SECRET_KEY') ? RECAPTCHA_SECRET_KEY : '';
     $recaptcha_verify = wp_remote_post('https://www.google.com/recaptcha/api/siteverify', [
         'body' => [
             'secret' => $recaptcha_secret,
