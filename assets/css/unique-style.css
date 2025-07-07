@@ -24,6 +24,22 @@
     height: auto;
 }
 
+/* Job description editor specific styles */
+.ap-job-form .job-description-field {
+    margin-bottom: 1.5rem;
+}
+
+.ap-job-form .wp-editor-container {
+    margin-top: 0.25rem;  /* Reduce space between label and editor */
+}
+
+.ap-job-form .description-help {
+    display: block;
+    margin-top: 0.5rem;
+    color: #666;
+    font-size: 0.9rem;
+}
+
 @media (max-width: 800px) {
     .ap-job-form input[type="text"],
     .ap-job-form input[type="url"],
