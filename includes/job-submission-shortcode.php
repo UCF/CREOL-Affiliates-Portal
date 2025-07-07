@@ -68,7 +68,7 @@ function ap_public_job_form_shortcode() {
         <form class="ap-job-form" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST">
             <?php wp_nonce_field('ap_submit_job', 'ap_submit_job_nonce'); ?>
             <input type="hidden" name="action" value="ap_submit_job">
-
+            <input type="hidden" name="recaptcha_response" id="recaptchaResponse">
             <p>
                 <label>
                     Company<span style="color:red;">*</span><br>
@@ -154,11 +154,15 @@ function ap_public_job_form_shortcode() {
             </a>
         </div>
     </div>
-   <script>
+ 
+    <script>
     document.addEventListener('DOMContentLoaded', function() {
         const form = document.querySelector('.ap-job-form');
         if (form) {
-            form.addEventListener('submit', function(e) {
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                // Get description content
                 let desc = '';
                 if (typeof tinymce !== 'undefined') {
                     const editor = tinymce.get('job_description');
@@ -169,9 +173,20 @@ function ap_public_job_form_shortcode() {
                     const textarea = document.getElementById('job_description');
                     if (textarea) desc = textarea.value.trim();
                 }
+                
                 if (!desc) {
                     alert('Please enter a job description.');
-                    e.preventDefault();
+                    return;
+                }
+
+                try {
+                    // Execute existing reCAPTCHA
+                    const token = await grecaptcha.execute('6LcZE1MpAAAAAHVXh1MKAnjZeBYYfqQwpGqpQF12', {action: 'submit_job'});
+                    document.getElementById('recaptchaResponse').value = token;
+                    form.submit();
+                } catch (error) {
+                    console.error('reCAPTCHA error:', error);
+                    alert('Error validating form submission. Please try again.');
                 }
             });
         }
@@ -187,10 +202,33 @@ function ap_public_job_form_shortcode() {
 add_action( 'admin_post_nopriv_ap_submit_job', 'ap_handle_job_submission' );
 add_action( 'admin_post_ap_submit_job',      'ap_handle_job_submission' );
 function ap_handle_job_submission() {
-    // a) Nonce verification
-    if ( ! isset( $_POST['ap_submit_job_nonce'] )
-      || ! wp_verify_nonce( $_POST['ap_submit_job_nonce'], 'ap_submit_job' ) ) {
-        wp_die( 'Security check failed.' );
+   // a) Nonce verification
+    if (!isset($_POST['ap_submit_job_nonce']) 
+        || !wp_verify_nonce($_POST['ap_submit_job_nonce'], 'ap_submit_job')) {
+        wp_die('Security check failed.');
+    }
+
+    // b) Verify reCAPTCHA
+    if (!isset($_POST['recaptcha_response'])) {
+        wp_die('reCAPTCHA verification failed.');
+    }
+
+    $recaptcha_secret = ''; // Add your reCAPTCHA secret key here
+    $recaptcha_verify = wp_remote_post('https://www.google.com/recaptcha/api/siteverify', [
+        'body' => [
+            'secret' => $recaptcha_secret,
+            'response' => $_POST['recaptcha_response']
+        ]
+    ]);
+
+    if (is_wp_error($recaptcha_verify)) {
+        wp_die('Error verifying reCAPTCHA.');
+    }
+
+    $recaptcha_result = json_decode(wp_remote_retrieve_body($recaptcha_verify));
+    
+    if (!$recaptcha_result->success || $recaptcha_result->score < 0.5) {
+        wp_die('reCAPTCHA verification failed. Please try again.');
     }
 
     // Sanitize inputs
