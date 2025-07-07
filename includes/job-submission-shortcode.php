@@ -181,7 +181,7 @@ function ap_public_job_form_shortcode() {
 
                 try {
                     // Execute existing reCAPTCHA
-                    const token = await grecaptcha.execute('6LcZE1MpAAAAAHVXh1MKAnjZeBYYfqQwpGqpQF12', {action: 'submit_job'});
+                    const token = await grecaptcha.execute('6LcZElMpAAAAAHVXhiMKAnjZeBYYfqOWpGqpQF12', {action: 'submit_job'});
                     document.getElementById('recaptchaResponse').value = token;
                     form.submit();
                 } catch (error) {
@@ -213,7 +213,7 @@ function ap_handle_job_submission() {
         wp_die('reCAPTCHA verification failed.');
     }
 
-   $recaptcha_secret = '6LcZE1MpAAAAACywF4ZDOgGlDlhhVkkZiGUCYuQT'; // Add your reCAPTCHA secret key here
+   $recaptcha_secret = '6LcZElMpAAAAAE8AybhfvOjuUsQ8Elw7iQRPckTv'; // Add your reCAPTCHA secret key here
     $recaptcha_verify = wp_remote_post('https://www.google.com/recaptcha/api/siteverify', [
         'body' => [
             'secret' => $recaptcha_secret,
