@@ -3,4 +3,4 @@
 node_modules/
 dist/
 .env
-wp-config.php
+wp-secure.php
