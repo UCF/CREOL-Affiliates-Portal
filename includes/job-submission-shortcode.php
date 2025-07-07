@@ -13,7 +13,7 @@ add_shortcode('public_job_form', 'ap_public_job_form_shortcode');
 
 function ap_public_job_form_shortcode() {
     ob_start();
-    wp_enqueue_script('google-recaptcha', 'https://www.google.com/recaptcha/api.js', array(), null, true);
+    wp_enqueue_script('google-recaptcha', 'https://www.google.com/recaptcha/api.js?render=' . esc_attr(RECAPTCHA_SITE_KEY), array(), null, true);
     // Show thank you message if redirected after submission
     if ( isset($_GET['job_submitted']) && $_GET['job_submitted'] == '1' ) {
     $form_url = remove_query_arg('job_submitted');
