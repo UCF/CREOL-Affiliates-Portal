@@ -228,19 +228,26 @@ function ap_handle_job_submission() {
         wp_die('reCAPTCHA verification failed.');
     }
 
-   $recaptcha_secret = defined('RECAPTCHA_SECRET_KEY') ? RECAPTCHA_SECRET_KEY : '';
+    $recaptcha_secret = defined('RECAPTCHA_SECRET_KEY') ? RECAPTCHA_SECRET_KEY : '';
     $recaptcha_verify = wp_remote_post('https://www.google.com/recaptcha/api/siteverify', [
         'body' => [
-            'secret' => $recaptcha_secret,
-            'response' => $_POST['recaptcha_response']
+            'secret'   => $recaptcha_secret,
+            'response' => $_POST['recaptcha_response'],
+            'remoteip' => $_SERVER['REMOTE_ADDR'],
         ]
     ]);
 
     if (is_wp_error($recaptcha_verify)) {
+        error_log('reCAPTCHA API Error: ' . $recaptcha_verify->get_error_message());
         wp_die('Error verifying reCAPTCHA.');
     }
 
     $recaptcha_result = json_decode(wp_remote_retrieve_body($recaptcha_verify));
+    
+    // Add detailed logging
+    error_log('reCAPTCHA Response: ' . print_r($recaptcha_result, true));
+    error_log('reCAPTCHA score: ' . (isset($recaptcha_result->score) ? $recaptcha_result->score : 'no score'));
+    error_log('reCAPTCHA success: ' . ($recaptcha_result->success ? 'true' : 'false'));
     
     if (!$recaptcha_result->success || $recaptcha_result->score < 0.5) {
         wp_die('reCAPTCHA verification failed. Please try again.');
